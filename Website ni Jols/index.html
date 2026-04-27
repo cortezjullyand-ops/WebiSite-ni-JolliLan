@@ -28,13 +28,13 @@
             align-items: center;
             padding: 10px 20px;
             position: fixed;
-            bottom: 0; /* Bottom nav as per image 1 */
+            bottom: 0; 
             width: 100%;
             z-index: 100;
             box-sizing: border-box;
         }
 
-        .nav-top { top: 0; bottom: auto; } /* Top nav for gallery view */
+        .nav-top { top: 0; bottom: auto; } 
 
         .logo-icon {
             color: white;
@@ -79,12 +79,17 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: white;
         }
 
         /* --- LOGIN PAGE SECTION --- */
         .login-wrapper {
             display: flex;
-            height: calc(100vh - 50px);
+            height: 100vh;
             align-items: center;
             position: relative;
         }
@@ -120,6 +125,7 @@
             border-radius: 10px;
             padding: 0 15px;
             color: white;
+            box-sizing: border-box;
         }
 
         .login-footer {
@@ -137,6 +143,13 @@
             border-radius: 15px;
             font-weight: bold;
             cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        
+        .btn-enter:hover {
+            background-color: var(--dark-red);
+            color: white;
+            transform: scale(1.05);
         }
 
         .social-icons {
@@ -155,7 +168,10 @@
             color: white;
             font-weight: bold;
             text-decoration: none;
+            transition: transform 0.3s;
         }
+        
+        .icon-circle:hover { transform: translateY(-5px); }
 
         /* --- DECORATIVE BRUSH STROKE --- */
         .brush-stroke {
@@ -165,17 +181,77 @@
             height: 100%;
             width: 30%;
             background-color: var(--primary-red);
-            /* Simulating the rough edge with a clip-path */
             clip-path: polygon(20% 0%, 0% 20%, 30% 35%, 10% 50%, 40% 65%, 10% 85%, 30% 100%, 100% 100%, 100% 0%);
         }
 
-        /* --- GALLERY GRID VIEW --- */
+        /* --- STYLIZED HOME PAGE SECTION --- */
+        .home-container {
+            padding: 120px 20px 50px 20px; /* Top padding accommodates the fixed top nav */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .home-menu-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .home-card-vertical {
+            background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
+            color: white;
+            padding: 30px 40px;
+            border-radius: 20px;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(209, 47, 38, 0.2);
+            border: 2px solid transparent;
+            transition: all 0.4s ease;
+        }
+
+        .home-card-vertical:hover {
+            transform: translateX(15px); /* Slides to the right gracefully */
+            box-shadow: 0 15px 30px rgba(209, 47, 38, 0.4);
+            border-color: var(--text-black);
+            background: linear-gradient(135deg, var(--dark-red), #900000);
+        }
+
+        .arrow-icon {
+            font-size: 32px;
+            opacity: 0.5;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .home-card-vertical:hover .arrow-icon {
+            opacity: 1;
+            transform: translateX(10px);
+        }
+
+        /* --- GALLERY & PLACEHOLDER PAGES --- */
         .gallery-container {
             padding: 100px 50px 50px 50px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
             height: calc(100vh - 150px);
+        }
+
+        .page-placeholder {
+            padding: 150px 50px;
+            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
         }
 
         .left-col {
@@ -194,22 +270,22 @@
         .box-tall { height: 100%; }
         .box-short { height: 50%; }
 
-        .hidden { display: none; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <nav id="mainNav">
+    <nav id="mainNav" class="hidden">
         <div class="logo-icon">|||</div>
         <div class="search-container">
             <span class="search-icon">🔍</span>
             <input type="text" placeholder="Search">
         </div>
         <div class="nav-links">
-            <a href="#" onclick="showPage('login')">Home</a>
-            <a href="#">Submit</a>
+            <a href="#" onclick="showPage('home')">Home</a>
+            <a href="#" onclick="showPage('submit')">Submit</a>
             <a href="#" onclick="showPage('gallery')">Gallery</a>
-            <a href="#">Others</a>
+            <a href="#" onclick="showPage('others')">Others</a>
         </div>
     </nav>
 
@@ -230,16 +306,33 @@
 
             <div class="login-footer">
                 <a href="#" style="font-size: 12px; color: black;">Forgot Your Password?</a>
-                <button class="btn-enter" onclick="showPage('gallery')">Enter</button>
+                <button class="btn-enter" onclick="showPage('home')">Enter</button>
             </div>
 
             <div class="social-icons">
-                <a href="#" class="icon-circle" style="background: #1877F2;">f</a>
-                <a href="#" class="icon-circle" style="background: #000000;">t</a>
-                <a href="#" class="icon-circle" style="background: #E60023;">P</a>
+                <a href="https://www.facebook.com/login/" target="_blank" class="icon-circle" style="background: #1877F2;">f</a>
+                <a href="https://www.tumblr.com/login" target="_blank" class="icon-circle" style="background: #000000;">t</a>
+                <a href="https://www.pinterest.com/login/" target="_blank" class="icon-circle" style="background: #E60023;">P</a>
             </div>
         </div>
         <div class="brush-stroke"></div>
+    </div>
+
+    <div id="homePage" class="home-container hidden">
+        <h1 class="main-title" style="margin-bottom: 10px; font-size: 65px;">Welcome</h1>
+        <p style="font-weight: bold; margin-bottom: 40px; color: #555;">Where do you want to go today?</p>
+        
+        <div class="home-menu-wrapper">
+            <div class="home-card-vertical" onclick="showPage('submit')">
+                Submit Artwork <span class="arrow-icon">→</span>
+            </div>
+            <div class="home-card-vertical" onclick="showPage('gallery')">
+                Explore Gallery <span class="arrow-icon">→</span>
+            </div>
+            <div class="home-card-vertical" onclick="showPage('others')">
+                Other Settings <span class="arrow-icon">→</span>
+            </div>
+        </div>
     </div>
 
     <div id="galleryPage" class="gallery-container hidden">
@@ -250,20 +343,40 @@
         <div class="gallery-box box-tall"></div>
     </div>
 
+    <div id="submitPage" class="page-placeholder hidden">
+        Submit Your Art Here
+    </div>
+
+    <div id="othersPage" class="page-placeholder hidden">
+        Other Settings & Features
+    </div>
+
     <script>
         function showPage(pageId) {
-            const nav = document.getElementById('mainNav');
-            const login = document.getElementById('loginPage');
-            const gallery = document.getElementById('galleryPage');
+            // 1. Hide all pages
+            const pages = ['loginPage', 'homePage', 'galleryPage', 'submitPage', 'othersPage'];
+            pages.forEach(p => {
+                const el = document.getElementById(p);
+                if (el) el.classList.add('hidden');
+            });
 
-            if(pageId === 'gallery') {
-                login.classList.add('hidden');
-                gallery.classList.remove('hidden');
-                nav.classList.add('nav-top'); // Move nav to top
+            // 2. Show the requested page
+            const target = document.getElementById(pageId + 'Page');
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            // 3. Handle Navigation Bar visibility
+            const nav = document.getElementById('mainNav');
+            
+            // Show nav on Home, Gallery, Submit, and Others pages
+            if (pageId === 'home' || pageId === 'gallery' || pageId === 'submit' || pageId === 'others') {
+                nav.classList.remove('hidden');
+                nav.classList.add('nav-top'); 
             } else {
-                login.classList.remove('hidden');
-                gallery.classList.add('hidden');
-                nav.classList.remove('nav-top'); // Move nav to bottom
+                // Hide nav strictly on the Login page
+                nav.classList.add('hidden');
+                nav.classList.remove('nav-top');
             }
         }
     </script>
