@@ -1,9 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>HomePage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ART-tillery Gallery</title>
+    <style>
+        :root {
+            --primary-red: #FF3B30;
+            --dark-red: #D12F26;
+            --bg-white: #ffffff;
+            --text-black: #000000;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-white);
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        /* --- NAVIGATION BAR --- */
+        nav {
+            background-color: var(--primary-red);
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            position: fixed;
+            bottom: 0; /* Bottom nav as per image 1 */
+            width: 100%;
+            z-index: 100;
+            box-sizing: border-box;
+        }
+
+        .nav-top { top: 0; bottom: auto; } /* Top nav for gallery view */
+
+        .logo-icon {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-container {
+            flex-grow: 1;
+            position: relative;
+            max-width: 400px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 8px 15px 8px 35px;
+            border-radius: 20px;
+            border: none;
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            margin-left: auto;
+            padding-right: 40px;
+        }
+
+        .nav-links a {
+            color: black;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* --- LOGIN PAGE SECTION --- */
+        .login-wrapper {
+            display: flex;
+            height: calc(100vh - 50px);
+            align-items: center;
+            position: relative;
+        }
+
+        .login-content {
+            padding-left: 10%;
+            z-index: 2;
+            width: 400px;
+        }
+
+        .main-title {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 80px;
+            margin: 0;
+            line-height: 0.8;
+        }
+
+        .sub-title {
+            font-size: 70px;
+            font-weight: 900;
+            margin: 0 0 30px 0;
+            letter-spacing: -2px;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+        
+        .input-box {
+            background-color: var(--primary-red);
+            border: none;
+            width: 100%;
+            height: 45px;
+            border-radius: 10px;
+            padding: 0 15px;
+            color: white;
+        }
+
+        .login-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .btn-enter {
+            background-color: var(--primary-red);
+            color: black;
+            border: none;
+            padding: 8px 25px;
+            border-radius: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .icon-circle {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        /* --- DECORATIVE BRUSH STROKE --- */
+        .brush-stroke {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 30%;
+            background-color: var(--primary-red);
+            /* Simulating the rough edge with a clip-path */
+            clip-path: polygon(20% 0%, 0% 20%, 30% 35%, 10% 50%, 40% 65%, 10% 85%, 30% 100%, 100% 100%, 100% 0%);
+        }
+
+        /* --- GALLERY GRID VIEW --- */
+        .gallery-container {
+            padding: 100px 50px 50px 50px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            height: calc(100vh - 150px);
+        }
+
+        .left-col {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .gallery-box {
+            background-color: #FF6B6B;
+            border: 8px solid var(--primary-red);
+            border-radius: 40px;
+            width: 100%;
+        }
+
+        .box-tall { height: 100%; }
+        .box-short { height: 50%; }
+
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
- <h3><center>Hi My Name is JolliLan</h3>
+
+    <nav id="mainNav">
+        <div class="logo-icon">|||</div>
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search">
+        </div>
+        <div class="nav-links">
+            <a href="#" onclick="showPage('login')">Home</a>
+            <a href="#">Submit</a>
+            <a href="#" onclick="showPage('gallery')">Gallery</a>
+            <a href="#">Others</a>
+        </div>
+    </nav>
+
+    <div id="loginPage" class="login-wrapper">
+        <div class="login-content">
+            <h1 class="main-title">ART-tillery</h1>
+            <h2 class="sub-title">GALLERY</h2>
+            
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="text" class="input-box">
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="input-box">
+            </div>
+
+            <div class="login-footer">
+                <a href="#" style="font-size: 12px; color: black;">Forgot Your Password?</a>
+                <button class="btn-enter" onclick="showPage('gallery')">Enter</button>
+            </div>
+
+            <div class="social-icons">
+                <a href="#" class="icon-circle" style="background: #1877F2;">f</a>
+                <a href="#" class="icon-circle" style="background: #000000;">t</a>
+                <a href="#" class="icon-circle" style="background: #E60023;">P</a>
+            </div>
+        </div>
+        <div class="brush-stroke"></div>
+    </div>
+
+    <div id="galleryPage" class="gallery-container hidden">
+        <div class="left-col">
+            <div class="gallery-box box-short"></div>
+            <div class="gallery-box box-short"></div>
+        </div>
+        <div class="gallery-box box-tall"></div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            const nav = document.getElementById('mainNav');
+            const login = document.getElementById('loginPage');
+            const gallery = document.getElementById('galleryPage');
+
+            if(pageId === 'gallery') {
+                login.classList.add('hidden');
+                gallery.classList.remove('hidden');
+                nav.classList.add('nav-top'); // Move nav to top
+            } else {
+                login.classList.remove('hidden');
+                gallery.classList.add('hidden');
+                nav.classList.remove('nav-top'); // Move nav to bottom
+            }
+        }
+    </script>
 </body>
 </html>
