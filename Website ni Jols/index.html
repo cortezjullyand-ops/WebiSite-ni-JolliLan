@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ART-tillery Gallery & Workshop</title>
+    <title>ART-tillery | Inclusive Creative Space</title>
     <style>
         :root {
             --primary-red: #FF3B30;
@@ -14,238 +14,165 @@
             --light-blue: #66B2FF;
             --bg-white: #ffffff;
             --text-black: #000000;
+            --gray-light: #f4f4f4;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-white);
-            height: 100%;
-            overflow-x: hidden;
+            height: 100%; overflow-x: hidden; scroll-behavior: smooth;
         }
 
-        /* --- NAVIGATION BARS --- */
+        /* --- ANIMATIONS --- */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-page { animation: fadeInUp 0.6s ease-out forwards; }
+
+        /* --- NAVIGATION --- */
         nav {
             background-color: var(--primary-red);
-            padding: 10px 20px;
-            position: fixed;
-            width: 100%;
-            z-index: 100;
-            box-sizing: border-box;
-            top: 0; 
-            height: 60px;
-            display: flex;
-            align-items: center;
+            padding: 0 25px; position: fixed; width: 100%; z-index: 100;
+            box-sizing: border-box; top: 0; height: 65px;
+            display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        #workshopNav { background-color: var(--workshop-blue); }
+        .nav-layout { display: grid; grid-template-columns: 1.2fr 1fr 1.2fr; width: 100%; align-items: center; }
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        .nav-center { display: flex; justify-content: center; }
+        .nav-right { display: flex; align-items: center; gap: 20px; justify-content: flex-end; }
 
-        .nav-layout {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr; /* Forces center content to be truly centered */
-            width: 100%;
-            align-items: center;
-        }
-
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            justify-content: flex-start;
-        }
-
-        .nav-center {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            justify-content: flex-end;
-        }
-
-        /* --- DROPDOWN MENU --- */
-        .dropdown { position: relative; display: inline-block; }
-        .hamburger { font-size: 26px; user-select: none; color: white; cursor: pointer; }
+        .hamburger { font-size: 26px; color: white; cursor: pointer; }
         .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: var(--bg-white);
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 200;
-            border-radius: 10px;
-            top: 40px; 
-            left: 0;
-            overflow: hidden;
+            display: none; position: absolute; background: white; min-width: 180px;
+            box-shadow: var(--shadow); border-radius: 12px; top: 55px; left: 0; overflow: hidden;
         }
-        .dropdown-content a {
-            color: var(--text-black);
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .dropdown-content a:hover { background-color: #f1f1f1; color: var(--primary-red); }
+        .dropdown-content a { color: black; padding: 12px 20px; text-decoration: none; display: block; font-weight: 600; cursor: pointer; }
         .show { display: block; }
 
-        .search-container { position: relative; width: 140px; }
+        .search-container { position: relative; width: 180px; }
         .search-container input {
-            width: 100%;
-            padding: 6px 15px 6px 30px;
-            border-radius: 20px;
-            border: none;
-            outline: none;
-            font-size: 13px;
+            width: 100%; padding: 8px 15px 8px 35px; border-radius: 20px; border: none; 
+            outline: none; background: rgba(255,255,255,0.9); box-sizing: border-box;
         }
-        .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #888; font-size: 12px; }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #888; font-size: 12px; }
 
-        nav a {
-            color: black;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 13px;
-            transition: color 0.3s;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        nav a:hover { color: white; }
-
-        /* CENTER ACTION BUTTONS */
+        nav a { color: black; text-decoration: none; font-weight: 700; font-size: 13px; transition: var(--transition); cursor: pointer; }
+        .btn-logout { padding: 8px 15px; background: rgba(0,0,0,0.1); border-radius: 8px; cursor: pointer; font-weight: 700; }
+        
         .btn-nav-center {
-            color: white !important;
-            padding: 8px 25px;
-            border-radius: 25px;
-            text-transform: uppercase;
-            font-weight: 800;
-            letter-spacing: 1px;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            font-size: 13px;
-            white-space: nowrap;
-            text-align: center;
+            color: white !important; padding: 10px 28px; border-radius: 30px;
+            text-transform: uppercase; font-weight: 800; border: 2px solid transparent; 
+            transition: var(--transition); cursor: pointer; font-size: 11px; text-decoration: none;
         }
-        .btn-workshop { background-color: var(--workshop-blue); box-shadow: 0 4px 10px rgba(0, 122, 255, 0.4); }
-        .btn-gallery { background-color: var(--primary-red); box-shadow: 0 4px 10px rgba(255, 59, 48, 0.4); }
-        .btn-nav-center:hover { transform: scale(1.05); border-color: white; }
+        .btn-workshop { background: var(--workshop-blue); box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3); }
 
-        /* --- LOGIN PAGE --- */
-        .login-wrapper { display: flex; height: 100vh; align-items: center; position: relative; }
-        .login-content { padding-left: 10%; z-index: 2; width: 400px; }
-        .main-title { font-family: 'Brush Script MT', cursive; font-size: 80px; margin: 0; line-height: 0.8; }
-        .sub-title { font-size: 70px; font-weight: 900; margin: 0 0 30px 0; letter-spacing: -2px; }
-        .input-box {
-            background-color: var(--primary-red);
-            border: none;
-            width: 100%;
-            height: 45px;
-            border-radius: 10px;
-            padding: 0 15px;
-            color: white;
-            box-sizing: border-box;
-            margin-top: 15px;
-        }
-        .login-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
-        .btn-enter { background-color: var(--primary-red); color: black; border: none; padding: 8px 25px; border-radius: 15px; font-weight: bold; cursor: pointer; }
+        /* --- LOGIN & SOCIALS --- */
+        .login-wrapper { display: flex; height: 100vh; align-items: center; position: relative; background: #fff; }
+        .login-content { padding-left: 10%; z-index: 2; width: 400px; animation: fadeInUp 0.8s ease; }
+        .main-title { font-family: 'Brush Script MT', cursive; font-size: 85px; margin: 0; line-height: 0.8; color: #222; }
+        .sub-title { font-size: 75px; font-weight: 900; margin: 0 0 30px 0; letter-spacing: -3px; color: #000; }
+        .input-box { background-color: var(--primary-red); border: none; width: 100%; height: 50px; border-radius: 12px; padding: 0 20px; color: white; margin-top: 15px; box-sizing: border-box; }
+        .btn-enter { background: var(--primary-red); color: white; border: none; padding: 12px 35px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: var(--transition); }
+        .btn-save { background: var(--workshop-blue); }
+        
         .social-icons { display: flex; gap: 15px; margin-top: 25px; }
-        .icon-circle { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-decoration: none; }
-        .brush-stroke {
-            position: absolute; right: 0; top: 0; height: 100%; width: 30%;
-            background-color: var(--primary-red);
-            clip-path: polygon(20% 0%, 0% 20%, 30% 35%, 10% 50%, 40% 65%, 10% 85%, 30% 100%, 100% 100%, 100% 0%);
+        .icon-circle { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-decoration: none; }
+        .fb { background-color: #1877F2; } .tm { background-color: #35465C; } .pn { background-color: #E60023; }
+        .brush-stroke { position: absolute; right: 0; top: 0; height: 100%; width: 35%; background-color: var(--primary-red); clip-path: polygon(25% 0%, 5% 20%, 35% 35%, 15% 50%, 45% 65%, 15% 85%, 35% 100%, 100% 100%, 100% 0%); }
+
+        /* --- HOME PAGE CARDS (HOVER UPDATED) --- */
+        .home-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
+        .home-card { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 30px; 
+            box-shadow: var(--shadow); 
+            transition: var(--transition); 
+            text-align: left; 
+            border-top: 8px solid var(--primary-red); 
+            cursor: pointer; 
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* THE HOVER EFFECT */
+        .home-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .home-card:active {
+            transform: translateY(-5px) scale(1.0);
         }
 
-        /* --- HOME PAGE --- */
-        .home-container { padding: 120px 20px 50px 20px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
-        .home-menu-wrapper { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 500px; margin-top: 20px; }
-        .home-card-vertical {
-            background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
-            color: white; padding: 25px 35px; border-radius: 20px; font-size: 24px; font-weight: 800;
-            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
-            transition: all 0.3s ease;
-        }
-        .home-card-vertical:hover { transform: translateX(10px); background: linear-gradient(135deg, var(--dark-red), #900000); }
+        /* --- LAYOUTS --- */
+        .container-view { padding: 110px 50px 50px 50px; min-height: 100vh; box-sizing: border-box; }
+        .home-container { padding: 120px 50px 50px 50px; min-height: 100vh; text-align: center; box-sizing: border-box; }
+        .hero-section { max-width: 1000px; margin: 0 auto; padding: 60px 0; }
+        .hero-title { font-size: 80px; font-weight: 900; line-height: 1; margin-bottom: 20px; letter-spacing: -2px; }
+        
+        /* --- PROFILE STYLES --- */
+        .profile-card { background: white; padding: 50px; border-radius: 40px; box-shadow: var(--shadow); display: grid; grid-template-columns: 300px 1fr; gap: 50px; position: relative; }
+        .profile-left { text-align: center; border-right: 2px solid #f0f0f0; padding-right: 50px; }
+        .profile-pic { width: 180px; height: 180px; background: #eee; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 60px; border: 6px solid var(--primary-red); }
+        .profile-info h2 { font-size: 32px; margin-bottom: 10px; }
+        .info-row { margin-bottom: 20px; }
+        .info-label { font-weight: 800; color: #888; text-transform: uppercase; font-size: 12px; display: block; margin-bottom: 5px; }
+        .info-value { font-size: 18px; color: #222; font-weight: 600; }
+        .tag { background: var(--workshop-blue); color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: bold; display: inline-block; margin-right: 8px; margin-top: 5px; }
 
-        /* --- GRID CONTENT --- */
-        .container-view { padding: 100px 50px 50px 50px; min-height: 100vh; box-sizing: border-box; }
-        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; height: calc(100vh - 160px); }
-        .left-col { display: flex; flex-direction: column; gap: 30px; }
-        .content-box { border-radius: 40px; width: 100%; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; color: white; border: 8px solid; }
-        .box-tall { height: 100%; }
-        .box-short { height: 50%; }
+        /* --- EDIT FORM STYLES --- */
+        .edit-input { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 12px; margin-bottom: 15px; font-family: inherit; font-size: 15px; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .edit-input:focus { border-color: var(--workshop-blue); }
+        .edit-select { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 12px; margin-bottom: 15px; appearance: none; background: #fff; cursor: pointer; box-sizing: border-box; }
+
+        /* --- SHARED COMPONENTS --- */
+        .grid-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; min-height: 600px; margin-bottom: 60px; }
+        .left-col { display: flex; flex-direction: column; gap: 30px; height: 100%; }
+        .content-box { border-radius: 40px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 900; color: white; border: 10px solid; cursor: pointer; box-shadow: var(--shadow); text-align: center; padding: 40px; box-sizing: border-box; }
+        .left-col .content-box { flex: 1; }
         .gallery-box { background-color: var(--light-red); border-color: var(--primary-red); }
         .workshop-box { background-color: var(--light-blue); border-color: var(--workshop-blue); }
+        .community-section { margin-top: 40px; text-align: left; }
+        .community-title { font-size: 36px; font-weight: 900; margin-bottom: 30px; border-bottom: 5px solid var(--primary-red); display: inline-block; }
+        .artist-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
+        .artist-card { background: white; padding: 20px; border-radius: 20px; border: 2px solid #eee; position: relative; transition: var(--transition); }
+        .artist-card:hover { transform: translateY(-5px); border-color: var(--primary-red); }
+        .rank-badge { position: absolute; top: 10px; right: 10px; color: white; padding: 4px 10px; border-radius: 10px; font-size: 11px; font-weight: 900; background: #000; }
+        .art-placeholder { width: 100%; height: 140px; background: #f0f0f0; border-radius: 12px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #ccc; }
+
+        /* --- ABOUT US GRID --- */
+        .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+        .about-card { padding: 40px; border-radius: 30px; color: white; box-shadow: var(--shadow); min-height: 250px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+        .vision { background: var(--primary-red); }
+        .mission { background: var(--workshop-blue); }
+        .goals { background: #222; }
+
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <!-- MAIN NAVIGATION BAR -->
+    <!-- NAVIGATION (Full Super Admin) -->
     <nav id="mainNav" class="hidden">
         <div class="nav-layout">
             <div class="nav-left">
-                <div class="dropdown">
-                    <div class="hamburger" onclick="toggleDropdown('mainRoleDropdown')">&#9776;</div>
-                    <div id="mainRoleDropdown" class="dropdown-content">
-                        <a onclick="selectRole('User')">User</a>
-                        <a onclick="selectRole('Admin')">Admin</a>
-                        <a onclick="selectRole('Super Admin')">Super Admin</a>
-                    </div>
+                <div class="hamburger" onclick="toggleDropdown('mainRoleDropdown')">&#9776;</div>
+                <div id="mainRoleDropdown" class="dropdown-content">
+                    <a onclick="selectRole('User')">User</a>
+                    <a onclick="selectRole('Admin')">Admin</a>
+                    <a onclick="selectRole('Super Admin')">Super Admin</a>
                 </div>
                 <a onclick="showPage('home')">Home</a>
                 <a onclick="showPage('gallery')">Gallery</a>
                 <a onclick="showPage('profile')">Profile</a>
                 <a onclick="showPage('about')">About</a>
             </div>
-            
-            <div class="nav-center">
-                <a class="btn-nav-center btn-workshop" onclick="showWorkshopPage('wsSubmit')">Enter Workshop</a>
-            </div>
-
+            <div class="nav-center"><a class="btn-nav-center btn-workshop" onclick="showWorkshopPage('wsSubmit')">Enter Workshop</a></div>
             <div class="nav-right">
-                <div class="search-container">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" placeholder="Search">
-                </div>
-                <a onclick="logOut()">Log-Out</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- WORKSHOP NAVIGATION BAR -->
-    <nav id="workshopNav" class="hidden">
-        <div class="nav-layout">
-            <div class="nav-left">
-                <div class="dropdown">
-                    <div class="hamburger" onclick="toggleDropdown('wsRoleDropdown')">&#9776;</div>
-                    <div id="wsRoleDropdown" class="dropdown-content">
-                        <a onclick="selectRole('User')">User</a>
-                        <a onclick="selectRole('Admin')">Admin</a>
-                        <a onclick="selectRole('Super Admin')">Super Admin</a>
-                    </div>
-                </div>
-                <a onclick="alert('Apply for Course')">Apply for Course</a>
-                <a onclick="alert('Look for Classes')">Look for Classes</a>
-                <a onclick="showWorkshopPage('wsRanking')">Ranking</a>
-                <a onclick="showWorkshopPage('wsActivity')">Activity</a>
-            </div>
-            
-            <div class="nav-center">
-                <a class="btn-nav-center btn-gallery" onclick="showPage('gallery')">Enter Gallery</a>
-            </div>
-
-            <div class="nav-right">
-                <div class="search-container">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" placeholder="Search">
-                </div>
-                <a onclick="logOut()">Log-Out</a>
+                <div class="search-container"><span class="search-icon">🔍</span><input type="text" placeholder="Search Gallery"></div>
+                <div class="btn-logout" onclick="logOut()">Log-Out</div>
             </div>
         </div>
     </nav>
@@ -254,110 +181,207 @@
     <div id="loginPage" class="login-wrapper">
         <div class="login-content">
             <h1 class="main-title">ART-tillery</h1>
-            <h2 class="sub-title">GALLERY</h2>
-            <input type="text" placeholder="Email Address" class="input-box">
+            <h2 class="sub-title">STUDIO</h2>
+            <input type="text" placeholder="Email / Username" class="input-box">
             <input type="password" placeholder="Password" class="input-box">
-            <div class="login-footer">
-                <a href="#" style="font-size: 11px; color: #555; text-decoration: none;">Forgot Password?</a>
-                <button class="btn-enter" onclick="showPage('home')">Log-In</button>
+            <div style="margin-top: 25px; display: flex; justify-content: space-between; align-items: center;">
+                <a href="#" style="font-size: 12px; color: #888; text-decoration: none;">Forgot Password?</a>
+                <button class="btn-enter" onclick="showPage('home')">LOG-IN</button>
             </div>
-            <div class="social-icons">
-                <a href="https://www.facebook.com/login/" target="_blank" class="icon-circle" style="background: #1877F2;">f</a>
-                <a href="https://www.tumblr.com/login" target="_blank" class="icon-circle" style="background: #000000;">t</a>
-                <a href="https://www.pinterest.com/login/" target="_blank" class="icon-circle" style="background: #E60023;">P</a>
+            <div class="social-icons" style="display: flex; gap: 15px; margin-top: 25px;">
+                <a href="https://www.facebook.com/login/" class="icon-circle fb">f</a>
+                <a href="https://www.tumblr.com/login" class="icon-circle tm">t</a>
+                <a href="https://pinterest.com/login" class="icon-circle pn">P</a>
             </div>
         </div>
         <div class="brush-stroke"></div>
     </div>
 
-    <!-- HOME PAGE -->
+    <!-- HOME PAGE (Hover selections) -->
     <div id="homePage" class="home-container hidden">
-        <h1 class="main-title" style="margin-bottom: 10px; font-size: 65px;">Welcome Back</h1>
-        <p style="font-weight: bold; margin-bottom: 40px; color: #555;">Dashboard Overview</p>
-        <div class="home-menu-wrapper">
-            <div class="home-card-vertical" onclick="showPage('gallery')">Explore Gallery <span>→</span></div>
-            <div class="home-card-vertical" onclick="showPage('profile')">Profile Management <span>→</span></div>
-            <div class="home-card-vertical" onclick="showPage('about')">About Us <span>→</span></div>
+        <div class="hero-section animate-page">
+            <h1 class="hero-title">Armed with <br><span style="color:var(--primary-red)">Creativity.</span></h1>
+            <p style="color:#666; font-size:18px;">A digital sanctuary where technical mastery meets untamed imagination.</p>
+            <div class="home-grid">
+                <div class="home-card" onclick="showPage('gallery')">
+                    <h3>The Gallery</h3>
+                    <p>Exhibit your finest work and gain recognition in the digital armory.</p>
+                </div>
+                <div class="home-card" style="border-top-color: var(--workshop-blue);" onclick="showWorkshopPage('wsSubmit')">
+                    <h3>The Workshop</h3>
+                    <p>Refine your skills and rank up your firepower.</p>
+                </div>
+                <div class="home-card" style="border-top-color: #000;" onclick="showPage('about')">
+                    <h3>About Us</h3>
+                    <p>Explore our mission, vision, and core community goals.</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- GALLERY PAGE -->
+    <!-- GALLERY PAGE (Full 10 Spots) -->
     <div id="galleryPage" class="container-view hidden">
-        <div class="grid-layout">
-            <div class="left-col">
-                <div class="content-box gallery-box box-short">Featured Art</div>
-                <div class="content-box gallery-box box-short">Exhibition Info</div>
+        <div class="animate-page">
+            <div class="grid-layout">
+                <div class="left-col">
+                    <div class="content-box gallery-box">Featured Art</div>
+                    <div class="content-box gallery-box">Exhibition Info</div>
+                </div>
+                <div class="content-box gallery-box" style="height:100%">Main Gallery Feed</div>
             </div>
-            <div class="content-box gallery-box box-tall">Main Gallery</div>
+            <div class="community-section">
+                <h2 class="community-title">Community Spotlight</h2>
+                <div class="artist-list">
+                    <!-- Restored 10 Rank Cards -->
+                    <div class="artist-card"><div class="rank-badge">RANK #1</div><div class="art-placeholder">?</div><h4>Spotlight Pending</h4></div>
+                    <div class="artist-card"><div class="rank-badge">RANK #2</div><div class="art-placeholder">?</div><h4>Spotlight Pending</h4></div>
+                    <div class="artist-card"><div class="rank-badge">RANK #3</div><div class="art-placeholder">?</div><h4>Spotlight Pending</h4></div>
+                    <div class="artist-card"><div class="rank-badge">RANK #4</div><div class="art-placeholder">?</div><h4>Spotlight Pending</h4></div>
+                    <div class="artist-card"><div class="rank-badge">RANK #5</div><div class="art-placeholder">?</div><h4>Spotlight Pending</h4></div>
+                    <div class="artist-card"><div class="rank-badge">RANK #6</div><div class="art-placeholder">?</div><h4>Spotlight Pending</h4></div>
+                    <div class="artist-card"><div class="rank-badge">RANK #7</div><div class="art-placeholder">?</div><h4>Spotlight Pending</h4></div>
+                    <div class="artist-card"><div class="rank-badge">RANK #8</div><div class="art-placeholder">?</div><h4>Spotlight Pending</h4></div>
+                    <div class="artist-card"><div class="rank-badge">RANK #9</div><div class="art-placeholder">?</div><h4>Spotlight Pending</h4></div>
+                    <div class="artist-card"><div class="rank-badge">RANK #10</div><div class="art-placeholder">?</div><h4>Spotlight Pending</h4></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- WORKSHOP PAGES -->
+    <!-- WORKSHOP PAGE (Full 10 Spots) -->
     <div id="wsSubmitPage" class="container-view hidden">
-        <div class="grid-layout">
-            <div class="left-col">
-                <div class="content-box workshop-box box-short">Class Syllabus</div>
-                <div class="content-box workshop-box box-short">My Courses</div>
+        <div class="animate-page">
+            <div class="grid-layout">
+                <div class="left-col">
+                    <div class="content-box workshop-box">Active Challenges</div>
+                    <div class="content-box workshop-box">Course Library</div>
+                </div>
+                <div class="content-box workshop-box" style="height:100%">Workshop Submissions</div>
             </div>
-            <div class="content-box workshop-box box-tall">Apply For Course</div>
+            <div class="community-section">
+                <h2 class="community-title" style="border-bottom-color: var(--workshop-blue);">Top Artisans</h2>
+                <div class="artist-list">
+                    <!-- Restored 10 Blue Rank Cards -->
+                    <div class="artist-card" style="border-color: var(--workshop-blue);"><div class="rank-badge" style="background: var(--workshop-blue);">RANK #1</div><div class="art-placeholder">🛠️</div><h4>Pending</h4></div>
+                    <div class="artist-card" style="border-color: var(--workshop-blue);"><div class="rank-badge" style="background: var(--workshop-blue);">RANK #2</div><div class="art-placeholder">🛠️</div><h4>Pending</h4></div>
+                    <div class="artist-card" style="border-color: var(--workshop-blue);"><div class="rank-badge" style="background: var(--workshop-blue);">RANK #3</div><div class="art-placeholder">🛠️</div><h4>Pending</h4></div>
+                    <div class="artist-card" style="border-color: var(--workshop-blue);"><div class="rank-badge" style="background: var(--workshop-blue);">RANK #4</div><div class="art-placeholder">🛠️</div><h4>Pending</h4></div>
+                    <div class="artist-card" style="border-color: var(--workshop-blue);"><div class="rank-badge" style="background: var(--workshop-blue);">RANK #5</div><div class="art-placeholder">🛠️</div><h4>Pending</h4></div>
+                    <div class="artist-card" style="border-color: var(--workshop-blue);"><div class="rank-badge" style="background: var(--workshop-blue);">RANK #6</div><div class="art-placeholder">🛠️</div><h4>Pending</h4></div>
+                    <div class="artist-card" style="border-color: var(--workshop-blue);"><div class="rank-badge" style="background: var(--workshop-blue);">RANK #7</div><div class="art-placeholder">🛠️</div><h4>Pending</h4></div>
+                    <div class="artist-card" style="border-color: var(--workshop-blue);"><div class="rank-badge" style="background: var(--workshop-blue);">RANK #8</div><div class="art-placeholder">🛠️</div><h4>Pending</h4></div>
+                    <div class="artist-card" style="border-color: var(--workshop-blue);"><div class="rank-badge" style="background: var(--workshop-blue);">RANK #9</div><div class="art-placeholder">🛠️</div><h4>Pending</h4></div>
+                    <div class="artist-card" style="border-color: var(--workshop-blue);"><div class="rank-badge" style="background: var(--workshop-blue);">RANK #10</div><div class="art-placeholder">🛠️</div><h4>Pending</h4></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="wsRankingPage" class="container-view hidden">
-        <div class="grid-layout">
-            <div class="left-col">
-                <div class="content-box workshop-box box-short">Monthly Rank</div>
-                <div class="content-box workshop-box box-short">Awards</div>
+    <!-- ABOUT PAGE -->
+    <div id="aboutPage" class="container-view hidden">
+        <div class="animate-page" style="text-align: center;">
+            <h1 class="main-title" style="font-size: 65px;">About Us</h1>
+            <div class="about-grid">
+                <div class="about-card vision"><h2>Vision</h2><p>Accessibility and freedom of artistic expression.</p></div>
+                <div class="about-card mission"><h2>Mission</h2><p>A hybrid platform for Gallery and Workshop.</p></div>
+                <div class="about-card goals"><h2>Goals</h2><p>Establishing a consistent community of artists.</p></div>
             </div>
-            <div class="content-box workshop-box box-tall">Artist Leaderboard</div>
         </div>
     </div>
 
-    <div id="wsActivityPage" class="container-view hidden">
-        <div class="grid-layout">
-            <div class="left-col">
-                <div class="content-box workshop-box box-short">Comments</div>
-                <div class="content-box workshop-box box-short">Activity</div>
+    <!-- PROFILE PAGE -->
+    <div id="profilePage" class="container-view hidden">
+        <div class="animate-page" style="max-width: 1100px; margin: 0 auto;">
+            <div class="profile-card">
+                <div class="profile-left">
+                    <div class="profile-pic">🎨</div>
+                    <div id="displayBtn">
+                        <button class="btn-enter" style="width: 100%;" onclick="toggleEditMode(true)">Edit Profile</button>
+                    </div>
+                    <div id="editBtn" class="hidden">
+                        <button class="btn-enter btn-save" style="width: 100%;" onclick="saveProfile()">Save Changes</button>
+                    </div>
+                    <p style="margin-top: 20px; font-size: 12px; color: #888;">Update your creative identity to better connect with the community.</p>
+                </div>
+
+                <div class="profile-info">
+                    <!-- VIEW MODE -->
+                    <div id="profileDisplayView">
+                        <h2 id="view-username" style="font-size: 42px; margin-bottom: 20px;">[No Username Set]</h2>
+                        
+                        <div class="info-row">
+                            <span class="info-label">Creative Specialty</span>
+                            <span class="info-value" id="view-specialty">*Enter Specialty*</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Preferred Art Medium</span>
+                            <span class="info-value" id="view-medium">*Choose Art Medium*</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Core Collaborators</span>
+                            <div id="view-collabs">
+                             <span class="info-value" id="view-medium">*Enter Collaborators*</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EDIT MODE -->
+                    <div id="profileEditView" class="hidden">
+                        <h2 style="margin-bottom: 25px; border-bottom: 3px solid var(--workshop-blue); display: inline-block;">Update Artist Details</h2>
+                        
+                        <span class="info-label">Artist Username</span>
+                        <input type="text" id="edit-username" class="edit-input" placeholder="e.g. ArtGunner_01">
+
+                        <span class="info-label">Professional Specialty</span>
+                        <input type="text" id="edit-specialty" class="edit-input" placeholder="e.g. Concept Art, UI/UX, C++ Development">
+
+                        <span class="info-label">Primary Art Medium</span>
+                        <select id="edit-medium" class="edit-select">
+                            <option value="" disabled selected>Select your medium</option>
+                            <option>Traditional Art</option>
+                            <option>Digital Art</option>
+                            <option>Hybrid (Traditional & Digital)</option>
+                        </select>
+
+                        <span class="info-label">Collaborators (Separate names with commas)</span>
+                        <input type="text" id="edit-collabs" class="edit-input" placeholder="Enter names of those you work with...">
+                        <p style="font-size: 11px; color: #666; margin-top: -10px;">Example: Nadine Paitan, Dana Ali</p>
+                    </div>
+                </div>
             </div>
-            <div class="content-box workshop-box box-tall">History Log</div>
         </div>
     </div>
-
-    <div id="profilePage" class="container-view hidden"><h1>Profile Settings</h1></div>
-    <div id="aboutPage" class="container-view hidden"><h1>About Our Studio</h1></div>
 
     <script>
-        const allPages = ['loginPage', 'homePage', 'galleryPage', 'profilePage', 'aboutPage', 'wsSubmitPage', 'wsRankingPage', 'wsActivityPage'];
-
+        const allPages = ['loginPage', 'homePage', 'galleryPage', 'profilePage', 'wsSubmitPage', 'aboutPage'];
         function hideAll() { allPages.forEach(p => document.getElementById(p)?.classList.add('hidden')); }
-
-        function showPage(pageId) {
-            hideAll();
-            document.getElementById(pageId + 'Page')?.classList.remove('hidden');
-            document.getElementById('workshopNav').classList.add('hidden');
-            document.getElementById('mainNav').classList.remove('hidden');
-        }
-
-        function showWorkshopPage(pageId) {
-            hideAll();
-            document.getElementById(pageId + 'Page')?.classList.remove('hidden');
-            document.getElementById('mainNav').classList.add('hidden');
-            document.getElementById('workshopNav').classList.remove('hidden');
-        }
-
+        function showPage(pageId) { hideAll(); document.getElementById(pageId + 'Page')?.classList.remove('hidden'); document.getElementById('mainNav').classList.remove('hidden'); }
+        function showWorkshopPage(pageId) { showPage('wsSubmit'); }
         function toggleDropdown(id) { document.getElementById(id).classList.toggle("show"); }
-        function logOut() {
-            hideAll();
-            document.getElementById('loginPage').classList.remove('hidden');
-            document.getElementById('mainNav').classList.add('hidden');
-            document.getElementById('workshopNav').classList.add('hidden');
-        }
-        function selectRole(role) { alert("Role: " + role); }
+        function logOut() { hideAll(); document.getElementById('loginPage').classList.remove('hidden'); document.getElementById('mainNav').classList.add('hidden'); }
 
-        window.onclick = function(event) {
-            if (!event.target.matches('.hamburger')) {
-                document.querySelectorAll('.dropdown-content').forEach(d => d.classList.remove('show'));
-            }
+        function toggleEditMode(isEdit) {
+            document.getElementById('profileDisplayView').classList.toggle('hidden', isEdit);
+            document.getElementById('displayBtn').classList.toggle('hidden', isEdit);
+            document.getElementById('profileEditView').classList.toggle('hidden', !isEdit);
+            document.getElementById('editBtn').classList.toggle('hidden', !isEdit);
+        }
+
+        function saveProfile() {
+            document.getElementById('view-username').innerText = document.getElementById('edit-username').value;
+            document.getElementById('view-specialty').innerText = document.getElementById('edit-specialty').value;
+            document.getElementById('view-medium').innerText = document.getElementById('edit-medium').value;
+            const collabContainer = document.getElementById('view-collabs');
+            collabContainer.innerHTML = '';
+            document.getElementById('edit-collabs').value.split(',').forEach(name => {
+                if(name.trim()) {
+                    const span = document.createElement('span'); span.className = 'tag'; span.innerText = name.trim();
+                    collabContainer.appendChild(span);
+                }
+            });
+            toggleEditMode(false);
         }
     </script>
 </body>
