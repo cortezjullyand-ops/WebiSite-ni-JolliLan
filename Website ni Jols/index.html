@@ -8,6 +8,8 @@
         :root {
             --primary-red: #FF3B30;
             --workshop-blue: #007AFF;
+            --bg-warm: #FFF9F5; 
+            --bg-cool: #F0F7FF; 
             --bg-white: #ffffff;
             --transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
             --shadow: 0 15px 35px rgba(0,0,0,0.1);
@@ -18,7 +20,55 @@
             font-family: 'Segoe UI', sans-serif;
             background-color: var(--bg-white);
             height: 100%; overflow-x: hidden; scroll-behavior: smooth;
+            transition: background-color 0.8s ease; 
         }
+
+        /* --- CUSTOM MODAL STYLES --- */
+        #customModalOverlay, #mediaViewerOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center; z-index: 1000;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-box {
+            background: white; padding: 40px; border-radius: 30px;
+            box-shadow: var(--shadow); width: 90%; max-width: 400px;
+            text-align: center; transform: translateY(20px); transition: transform 0.3s ease;
+            border-bottom: 8px solid var(--workshop-blue);
+        }
+        .modal-box.red-theme { border-bottom-color: var(--primary-red); }
+        .modal-box h2 { margin-top: 0; font-weight: 900; font-size: 24px; color: #333; }
+        .modal-box p { color: #666; line-height: 1.6; margin-bottom: 25px; }
+        .modal-input {
+            width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #eee;
+            margin-bottom: 20px; box-sizing: border-box; outline: none; font-size: 16px;
+        }
+        .modal-btn {
+            background: var(--workshop-blue); color: white; border: none;
+            padding: 12px 30px; border-radius: 15px; font-weight: 700;
+            cursor: pointer; transition: 0.3s; width: 100%;
+        }
+        .modal-btn.red-btn { background: var(--primary-red); }
+
+        /* --- MEDIA VIEWER SPECIFIC --- */
+        .viewer-content {
+            background: white; width: 90%; max-width: 900px; max-height: 85vh;
+            border-radius: 30px; overflow-y: auto; padding: 30px; position: relative;
+            transform: scale(0.9); transition: 0.3s;
+        }
+        .close-viewer {
+            position: absolute; top: 20px; right: 20px; font-size: 30px;
+            cursor: pointer; font-weight: bold; color: #333;
+        }
+        .viewer-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px; margin-top: 20px;
+        }
+        .viewer-img {
+            width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 15px;
+            border: 1px solid #eee;
+        }
+        .full-img-view { width: 100%; border-radius: 20px; }
 
         /* --- NAVIGATION --- */
         nav {
@@ -54,28 +104,59 @@
             font-size: 10px; font-weight: 900; cursor: pointer;
             position: relative; transition: 0.3s;
         }
-        .notif-badge:hover { transform: scale(1.1); }
-        .notif-dot { position: absolute; top: 0; right: 0; width: 8px; height: 8px; background: #ffcc00; border-radius: 50%; display: none; }
 
-        /* --- LOGIN & CARDS --- */
+        /* --- LOGIN PAGE DESIGN --- */
         #loginPage {
-            height: 100vh; display: flex; align-items: center; justify-content: center;
-            background: #fdfdfd;
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            background: radial-gradient(circle at center, #ffffff 0%, #f0f0f0 100%);
+            position: relative;
+            overflow: hidden;
         }
-        .login-card { text-align: center; animation: fadeInScale 1.2s ease-out; }
+
+        #loginPage::before {
+            content: ''; position: absolute; width: 400px; height: 400px;
+            background: var(--primary-red); filter: blur(150px); opacity: 0.1;
+            top: -100px; left: -100px; z-index: 1;
+        }
+
+        #loginPage::after {
+            content: ''; position: absolute; width: 400px; height: 400px;
+            background: var(--workshop-blue); filter: blur(150px); opacity: 0.1;
+            bottom: -100px; right: -100px; z-index: 1;
+        }
+
+        .login-card { 
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 60px 50px;
+            border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+            border: 1px solid rgba(255,255,255,0.5);
+            text-align: center; 
+            animation: fadeInScale 1.2s ease-out; 
+            max-width: 450px;
+            width: 90%;
+        }
+
         @keyframes fadeInScale {
             0% { opacity: 0; transform: scale(0.9) translateY(20px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .greeting-title {
-            font-family: 'Brush Script MT', cursive; font-size: 80px; margin: 0;
+            font-family: 'Brush Script MT', cursive; font-size: 85px; margin: 0;
             color: var(--primary-red);
             animation: slideIn 1.5s ease-out;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
         }
         .sub-greeting {
-            font-size: 22px; color: #444; margin-bottom: 40px; font-weight: 300;
-            letter-spacing: 3px; animation: slideIn 1.8s ease-out;
+            font-size: 14px; color: #666; margin-bottom: 45px; font-weight: 700;
+            letter-spacing: 5px; text-transform: uppercase; animation: slideIn 1.8s ease-out;
         }
 
         @keyframes slideIn {
@@ -83,6 +164,7 @@
             100% { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
 
+        /* --- LOGIN & CARDS --- */
         .container-view { padding: 110px 50px 50px 50px; min-height: 100vh; box-sizing: border-box; }
         .hidden { display: none !important; }
         .animate-page { animation: pageEnter 0.7s ease-out forwards; }
@@ -98,20 +180,86 @@
         .home-card.ws-theme { border-top-color: var(--workshop-blue); }
         .home-card.active-folder { border: 2px solid var(--primary-red); background: #fff9f9; }
 
-        /* --- COLLAB SECTION STYLES --- */
+        /* --- GALLERY & SPOTLIGHT --- */
+        .spotlight-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 20px; 
+            margin-top: 30px; 
+        }
+
+        .spotlight-item { 
+            height: 250px; 
+            background: #f8f8f8; 
+            border-radius: 20px; 
+            border: 1px solid #eee; 
+            background-size: cover; 
+            background-position: center;
+            overflow: hidden; 
+            display: flex; 
+            align-items: flex-end; 
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease; 
+        }
+
+        .spotlight-item:hover {
+            transform: scale(1.05) translateY(-5px); 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .social-bar {
+            width: 100%; 
+            height: 40px; 
+            background: rgba(255, 255, 255, 0.95);
+            display: flex; 
+            align-items: center; 
+            justify-content: space-around;
+            border-top: 1px solid #eee;
+            transform: translateY(40px); 
+            transition: transform 0.3s ease;
+        }
+
+        .spotlight-item:hover .social-bar {
+            transform: translateY(0); 
+        }
+
+        .social-action { 
+            cursor: pointer; 
+            font-size: 12px; 
+            font-weight: 800; 
+            color: #555; 
+            transition: color 0.2s; 
+        }
+
+        .social-action:hover {
+            color: var(--primary-red);
+        }
+        
+        .social-action.liked { color: var(--primary-red); }
+
+        .gallery-tier {
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 20px;
+            margin-top: 20px; 
+            margin-bottom: 60px;
+        }
+
+        /* --- COLLAB & RANKING STYLES --- */
         .search-bar {
             width: 100%; max-width: 600px; padding: 15px 25px;
             border-radius: 30px; border: 2px solid #eee; font-size: 16px;
             outline: none; transition: 0.3s; margin-bottom: 30px;
         }
-        .search-bar:focus { border-color: var(--workshop-blue); box-shadow: 0 5px 15px rgba(0,122,255,0.1); }
         
         .collab-tag {
             font-size: 10px; text-transform: uppercase; font-weight: 800;
             color: var(--workshop-blue); margin-bottom: 10px; display: block;
         }
 
-        /* --- CALENDAR STYLES --- */
         .calendar-row { 
             display: flex; gap: 15px; overflow-x: auto; padding: 20px 0; 
             scrollbar-width: none; justify-content: center;
@@ -121,13 +269,10 @@
             border-radius: 20px; padding: 15px; text-align: center;
             cursor: pointer; transition: 0.3s;
         }
-        .calendar-day:hover { border-color: var(--workshop-blue); transform: translateY(-5px); }
         .calendar-day.active { background: var(--workshop-blue); color: white; border-color: var(--workshop-blue); box-shadow: 0 10px 20px rgba(0,122,255,0.2); }
-        .calendar-day span { display: block; }
         .day-name { font-size: 12px; font-weight: 800; text-transform: uppercase; opacity: 0.7; }
         .day-number { font-size: 24px; font-weight: 900; margin: 5px 0; }
 
-        /* --- RANKING STYLES --- */
         .rank-filter-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; align-items: center; }
         .filter-group { display: flex; gap: 10px; background: #f0f0f0; padding: 5px; border-radius: 50px; }
         .filter-btn { 
@@ -140,43 +285,57 @@
             margin-bottom: 12px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             transition: 0.3s;
         }
-        .rank-item:hover { transform: scale(1.02); }
         .rank-number { font-size: 24px; font-weight: 900; width: 50px; color: var(--workshop-blue); }
         .rank-info { flex-grow: 1; text-align: left; }
         .rank-val { font-weight: 800; font-size: 18px; color: #333; }
 
-        /* --- GALLERY TIER --- */
-        .gallery-tier {
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;
-            margin-top: 20px; margin-bottom: 60px;
-        }
-
-        /* --- INTERACTIVE ELEMENTS --- */
         .editable-field {
             border: 2px dashed #ddd; padding: 15px; border-radius: 15px;
             font-size: 18px; outline: none; transition: 0.3s; margin-bottom: 20px;
         }
-        .editable-field:focus { border-color: var(--primary-red); background: #fffcfc; }
+
+        .medium-selector {
+            display: flex; gap: 10px; margin-bottom: 25px;
+        }
+        .medium-btn {
+            flex: 1; padding: 12px; border-radius: 15px; border: 2px solid #eee;
+            background: white; font-weight: 800; cursor: pointer; transition: 0.3s;
+            font-size: 12px; color: #666;
+        }
+        .medium-btn.selected {
+            border-color: var(--primary-red); color: var(--primary-red); background: #fff9f9;
+        }
         
         .btn-action {
             background: var(--primary-red); color: white; border: none;
             padding: 12px 30px; border-radius: 15px; font-weight: 700;
             cursor: pointer; transition: 0.3s;
         }
-        .btn-action:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255,59,48,0.3); }
 
         .about-box { padding: 40px; background: #fff; border-radius: 30px; box-shadow: var(--shadow); transition: 0.3s; }
-        .about-box:hover { transform: scale(1.02); }
-
-        .spotlight-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 30px; }
-        .spotlight-item { 
-            height: 250px; background: #f8f8f8; border-radius: 20px; border: 1px solid #eee; 
-            transition: 0.3s; background-size: cover; background-position: center;
-            overflow: hidden; display: flex; align-items: flex-end; justify-content: center;
-        }
     </style>
 </head>
 <body>
+
+    <!-- MODALS -->
+    <div id="customModalOverlay">
+        <div id="modalBox" class="modal-box">
+            <h2 id="modalTitle">Notice</h2>
+            <p id="modalMessage"></p>
+            <div id="modalInputArea" class="hidden">
+                <input type="text" id="customInput" class="modal-input">
+            </div>
+            <button id="modalConfirm" class="modal-btn">ACKNOWLEDGE</button>
+        </div>
+    </div>
+
+    <div id="mediaViewerOverlay">
+        <div class="viewer-content" id="viewerBox">
+            <span class="close-viewer" onclick="closeMediaViewer()">&times;</span>
+            <h2 id="viewerTitle" style="margin-bottom: 10px;">Viewer</h2>
+            <div id="viewerBody"></div>
+        </div>
+    </div>
 
     <!-- NAV BAR -->
     <nav id="mainNav" class="nav-red hidden">
@@ -194,19 +353,21 @@
         <div class="login-card">
             <h1 class="greeting-title">ART-tillery</h1>
             <p class="sub-greeting">Gallery and Workshop</p>
-            <button class="btn-workshop-toggle" style="background: var(--primary-red); color: white; padding: 15px 45px; font-size: 14px;" onclick="showPage('home')">ENTER STUDIO</button>
+            <button class="btn-workshop-toggle" 
+                style="background: var(--primary-red); color: white; padding: 18px 50px; font-size: 14px; border-radius: 50px; width: 100%; box-shadow: 0 10px 25px rgba(255, 59, 48, 0.3);" 
+                onclick="showPage('home')">ENTER STUDIO</button>
         </div>
     </div>
 
-    <!-- HOME PAGE -->
+    <!-- PAGES -->
     <div id="homePage" class="container-view hidden">
         <div class="animate-page" style="text-align: center;">
             <h1 style="font-size: 70px; font-weight: 900; margin:0;">Armed with <br><span style="color:var(--primary-red)">Creativity.</span></h1>
             <div class="home-grid">
-                <div class="home-card" onclick="showPage('publish')"><h3>Publish Work</h3><p>Manage your studio folders and upload your latest creations.</p></div>
-                <div class="home-card" onclick="showPage('gallery')"><h3>The Gallery</h3><p>Exhibit your finest work in the digital armory.</p></div>
-                <div class="home-card" style="border-top-color: var(--workshop-blue);" onclick="enterWorkshop()"><h3>The Workshop</h3><p>Refine your technical skills and rank up.</p></div>
-                <div class="home-card" style="border-top-color: #333;" onclick="showPage('about')"><h3>About Us</h3><p>Learn about our mission, vision, and goals.</p></div>
+                <div class="home-card" onclick="showPage('publish')"><h3>Publish Work</h3><p>Manage folders and upload creations.</p></div>
+                <div class="home-card" onclick="showPage('gallery')"><h3>The Gallery</h3><p>Exhibit work in the digital armory.</p></div>
+                <div class="home-card ws-theme" onclick="enterWorkshop()"><h3>The Workshop</h3><p>Refine skills and rank up.</p></div>
+                <div class="home-card" style="border-top-color: #333;" onclick="showPage('about')"><h3>About Us</h3><p>Our mission and vision.</p></div>
             </div>
             <div style="margin-top: 80px; text-align: left;">
                 <h2 style="font-size: 35px; font-weight: 800;">Artisan Spotlight</h2>
@@ -215,21 +376,20 @@
         </div>
     </div>
 
-    <!-- PUBLISH SECTION -->
     <div id="publishPage" class="container-view hidden">
         <div class="animate-page">
             <h1>Studio Management</h1>
-            <p id="activeFolderLabel" style="font-weight: bold; color: var(--primary-red);">Selected Folder: Main Portfolio</p>
+            <p id="activeFolderLabel" style="font-weight: bold; color: var(--primary-red);"></p>
             <div style="margin-bottom: 40px; display: flex; gap: 15px;">
                 <input type="file" id="artFileInput" style="display:none" accept="image/*" onchange="handleFileUpload(event)">
-                <button class="btn-action" onclick="document.getElementById('artFileInput').click()">+ Upload to Folder</button>
+                <button class="btn-action" onclick="document.getElementById('artFileInput').click()">+ Upload ArtWork</button>
                 <button class="btn-action" style="background:#333;" onclick="createFolder()">+ Create Folder</button>
+                <button class="btn-action" style="background:var(--workshop-blue);" onclick="viewCurrentFolder()">View Works</button>
             </div>
             <div id="folderContainer" class="home-grid"></div>
         </div>
     </div>
 
-    <!-- GALLERY SECTION -->
     <div id="galleryPage" class="container-view hidden">
         <div class="animate-page">
             <h1>The Community Gallery</h1>
@@ -240,42 +400,45 @@
         </div>
     </div>
 
-    <!-- PROFILE SECTION -->
     <div id="profilePage" class="container-view hidden">
         <div class="animate-page" style="max-width: 700px; margin: 0 auto;">
             <h1>Artist Profile</h1>
-            <div class="about-box" style="text-align: left;">
+            <div class="about-box">
                 <label><strong>Username</strong></label>
-                <div class="editable-field" contenteditable="true">Artisan_User</div>
+                <div class="editable-field" id="profileName" contenteditable="true">Artisan_User</div>
+                
                 <label><strong>Specialty</strong></label>
-                <div class="editable-field" contenteditable="true">Illustrator / Concept Artist</div>
-                <label><strong>Art Medium</strong></label>
-                <select class="editable-field" style="width: 100%; border-style: solid;">
-                    <option>Digital</option><option>Traditional</option><option selected>Both (Hybrid)</option>
-                </select>
-                <button class="btn-action" style="width: 100%;" onclick="alert('Profile Saved!')">Update Portfolio</button>
+                <div class="editable-field" id="profileSpecialty" contenteditable="true">Illustrator / Concept Artist</div>
+                
+                <label><strong>Primary Art Medium</strong></label>
+                <div class="medium-selector">
+                    <button class="medium-btn" id="med-trad" onclick="selectMedium('Traditional')">Traditional</button>
+                    <button class="medium-btn" id="med-digi" onclick="selectMedium('Digital')">Digital</button>
+                    <button class="medium-btn" id="med-both" onclick="selectMedium('Both')">Digital & Traditional</button>
+					<button class="medium-btn" id="med-both" onclick="selectMedium('Both')">Photography</button>
+                </div>
+
+                <button class="btn-action" style="width: 100%;" onclick="saveProfile()">Update Portfolio</button>
             </div>
         </div>
     </div>
 
-    <!-- ABOUT SECTION -->
     <div id="aboutPage" class="container-view hidden">
         <div class="animate-page" style="text-align: center;">
             <h1>Our Foundation</h1>
             <div class="home-grid">
-                <div class="about-box"><h3 style="color:var(--primary-red)">Vision</h3><p>To be the premier inclusive creative space where technicality meets expression on a global scale.</p></div>
-                <div class="about-box"><h3 style="color:var(--primary-red)">Mission</h3><p>To sharpen artistic technicality through discipline, workshops, and community feedback.</p></div>
-                <div class="about-box"><h3 style="color:var(--primary-red)">Goals</h3><p>Bridging the gap between digital and traditional art while fostering 1M creative minds by 2027.</p></div>
+                <div class="about-box"><h3 style="color:var(--primary-red)">Vision</h3><p>Global creative space.</p></div>
+                <div class="about-box"><h3 style="color:var(--primary-red)">Mission</h3><p>Sharpen technicality.</p></div>
+                <div class="about-box"><h3 style="color:var(--primary-red)">Goals</h3><p>1M minds by 2027.</p></div>
             </div>
         </div>
     </div>
 
-    <!-- WORKSHOP VIEWS -->
     <div id="workshopHomePage" class="container-view hidden" style="text-align: center;">
         <h1 style="font-size: 70px; font-weight: 900;">Refine your <br><span style="color:var(--workshop-blue)">Technicality.</span></h1>
         <div class="home-grid">
             <div class="home-card ws-theme" onclick="loadCourseLessons('digital')"><h3>Digital Course</h3><p>Master the digital armory.</p></div>
-            <div class="home-card ws-theme" onclick="loadCourseLessons('traditional')"><h3>Traditional Course</h3><p>Honor the classic methods.</p></div>
+            <div class="home-card ws-theme" onclick="loadCourseLessons('traditional')"><h3>Traditional Course</h3><p>Honor classic methods.</p></div>
             <div class="home-card ws-theme" onclick="loadCourseLessons('dual')"><h3>The Dual Course</h3><p>Combine both worlds.</p></div>
         </div>
     </div>
@@ -289,47 +452,35 @@
         <h1 style="text-align:center;">Select Training Date</h1>
         <p id="selectedLessonName" style="text-align:center; font-weight: bold; color: var(--workshop-blue);"></p>
         <div class="calendar-row" id="calendarGrid"></div>
-        <div id="timeSlots" class="home-grid" style="margin-top: 30px;">
-            <!-- Times appear after clicking a date -->
-        </div>
+        <div id="timeSlots" class="home-grid" style="margin-top: 30px;"></div>
     </div>
 
-    <!-- RANKINGS PAGE -->
     <div id="wsRankPage" class="container-view hidden">
         <div class="animate-page" style="max-width: 800px; margin: 0 auto; text-align: center;">
-            <h1 style="font-size: 50px;">Workshop <span style="color:var(--workshop-blue)">Leaderboard</span></h1>
-            
+            <h1>Workshop <span style="color:var(--workshop-blue)">Leaderboard</span></h1>
             <div class="rank-filter-container">
                 <div class="filter-group">
                     <button class="filter-btn active" id="cat-views" onclick="setRankCategory('views')">VIEWS</button>
                     <button class="filter-btn" id="cat-likes" onclick="setRankCategory('likes')">LIKES</button>
-                    <button class="filter-btn" id="cat-shares" onclick="setRankCategory('shares')">SHARES</button>
                 </div>
                 <div class="filter-group">
-                    <button class="filter-btn active" id="time-daily" onclick="setRankTimeframe('daily')">DAILY</button>
-                    <button class="filter-btn" id="time-weekly" onclick="setRankTimeframe('weekly')">WEEKLY</button>
-                    <button class="filter-btn" id="time-monthly" onclick="setRankTimeframe('monthly')">MONTHLY</button>
+                <button class="filter-btn active" id="time-daily" onclick="setRankTimeframe('daily')">DAILY</button>
+                <button class="filter-btn" id="time-weekly" onclick="setRankTimeframe('weekly')">WEEKLY</button>
+                <button class="filter-btn" id="time-monthly" onclick="setRankTimeframe('monthly')">MONTHLY</button>
                 </div>
             </div>
-
             <div id="rankCont"></div>
         </div>
     </div>
 
-    <!-- COLLAB SECTION (UPDATED) -->
     <div id="wsCollabPage" class="container-view hidden">
         <div class="animate-page" style="text-align: center;">
-            <h1 style="font-size: 50px;">Artisan <span style="color:var(--workshop-blue)">Collaborations</span></h1>
-            <p>Join forces with other creative minds or initiate your own project.</p>
-            
-            <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center;">
-                <input type="text" class="search-bar" placeholder="Search collab requests by title or artist..." oninput="handleCollabSearch(this.value)">
-                <button class="btn-action" style="background:var(--workshop-blue); margin-bottom: 20px;" onclick="openCollabModal()">+ Create a Collab Request</button>
+            <h1>Artisan <span style="color:var(--workshop-blue)">Collaborations</span></h1>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 30px;">
+                <input type="text" class="search-bar" style="margin-bottom:0;" placeholder="Search collaborations..." oninput="handleCollabSearch(this.value)">
+                <button class="btn-action" style="background: var(--workshop-blue); height: 55px; border-radius: 30px;" onclick="askForCollab()">Ask for Collab</button>
             </div>
-
-            <div id="collabContainer" class="home-grid">
-                <!-- 5 Random Homecards appear here -->
-            </div>
+            <div id="collabContainer" class="home-grid"></div>
         </div>
     </div>
 
@@ -344,221 +495,75 @@
         let selectedFolder = "Main Portfolio";
         let activeLesson = "";
 
-        const workshopData = {
-            digital: ["Vector Mastery", "Character Design Pro", "Environment Lighting", "UI/UX Systems", "Digital Brushwork"],
-            traditional: ["Anatomy Fundamentals", "Oil Painting 101", "Watercolor Flow", "Charcoal Portraits", "Sculptural Form"],
-            dual: ["Hybrid Workflow", "Scanning & Inking", "Mixed Media Textures", "Physical-to-Digital Painting", "Traditional Texturing for 3D"]
+        // Profile State
+        let userData = {
+            username: "Artisan_User",
+            specialty: "Illustrator / Concept Artist",
+            medium: "Digital"
         };
 
-        // Pool of potential collab requests
-        const collabPool = [
+        const workshopData = {
+            digital: ["Vector Mastery", "Character Design Pro", "Environment Lighting"],
+            traditional: ["Anatomy Fundamentals", "Oil Painting 101", "Watercolor Flow"],
+            dual: ["Hybrid Workflow", "Scanning & Inking", "Mixed Media Textures"]
+        };
+
+        let collabPool = [
             { title: "Mecha Manga Jam", artist: "@GundamFan99", type: "Manga" },
             { title: "Cyberpunk Streetscape", artist: "@NeonArtist", type: "Environment" },
-            { title: "Fantasy Flora Study", artist: "@BotanistArt", type: "Traditional" },
-            { title: "3D Character Sculpt", artist: "@ModelMaster", type: "3D Design" },
-            { title: "Watercolor Portraits", artist: "@HueSeeker", type: "Watercolor" },
-            { title: "Logo Design Relay", artist: "@BrandSmith", type: "Graphic Design" },
-            { title: "Inking Marathon", artist: "@InkLover", type: "Illustration" },
-            { title: "Hybrid Reality Deck", artist: "@FusionPainter", type: "Mixed Media" },
-            { title: "Game Sprite Sheet", artist: "@PixelPro", type: "Pixel Art" },
-            { title: "Oil Canvas Collab", artist: "@ClassicTouch", type: "Traditional" }
+            { title: "Fantasy Flora Study", artist: "@BotanistArt", type: "Traditional" }
         ];
 
-        let currentActiveCollabs = [];
+        /* --- PROFILE LOGIC --- */
+        function selectMedium(med) {
+            userData.medium = med;
+            document.querySelectorAll('.medium-btn').forEach(b => b.classList.remove('selected'));
+            const idMap = { 'Traditional': 'med-trad', 'Digital': 'med-digi', 'Both': 'med-both' };
+            document.getElementById(idMap[med]).classList.add('selected');
+        }
 
+        function saveProfile() {
+            userData.username = document.getElementById('profileName').innerText;
+            userData.specialty = document.getElementById('profileSpecialty').innerText;
+            openCustomAlert('Profile Update', `Portfolio saved! You are now known as ${userData.username}, specializing in ${userData.medium} art.`, true);
+        }
+
+        /* --- CORE LOGIC --- */
         function showPage(pageId) {
             allPages.forEach(p => { const el = document.getElementById(p); if(el) el.classList.add('hidden'); });
             const target = document.getElementById(pageId.endsWith('Page') ? pageId : pageId + 'Page');
             if(target) target.classList.remove('hidden');
-            document.getElementById('mainNav').classList.remove('hidden');
             
+            if(pageId !== 'login') {
+                document.getElementById('mainNav').classList.remove('hidden');
+                document.body.style.backgroundColor = isWorkshopMode ? "var(--bg-cool)" : "var(--bg-warm)";
+            } else {
+                document.body.style.backgroundColor = "var(--bg-white)";
+            }
+
             if(pageId === 'home') generateSpotlight();
             if(pageId === 'gallery') renderGallery();
             if(pageId === 'publish') renderFolders();
             if(pageId === 'wsRank') generateRankings();
-            if(pageId === 'wsCollab') generateRandomCollabs();
+            if(pageId === 'wsCollab') handleCollabSearch('');
+            if(pageId === 'profile') {
+                document.getElementById('profileName').innerText = userData.username;
+                document.getElementById('profileSpecialty').innerText = userData.specialty;
+                selectMedium(userData.medium);
+            }
             updateNav();
         }
-
-        /* --- COLLAB LOGIC (NEW) --- */
-
-        function generateRandomCollabs() {
-            // Shuffle and pick 5
-            currentActiveCollabs = [...collabPool]
-                .sort(() => 0.5 - Math.random())
-                .slice(0, 5);
-            renderCollabCards(currentActiveCollabs);
-        }
-
-        function renderCollabCards(list) {
-            const container = document.getElementById('collabContainer');
-            container.innerHTML = '';
-            
-            list.forEach(collab => {
-                const card = document.createElement('div');
-                card.className = 'home-card ws-theme';
-                card.innerHTML = `
-                    <span class="collab-tag">${collab.type}</span>
-                    <h3>${collab.title}</h3>
-                    <p>Requested by: <strong>${collab.artist}</strong></p>
-                    <button class="btn-action" style="background:var(--workshop-blue); font-size:10px; margin-top:20px;" onclick="acceptCollab('${collab.title}')">ACCEPT REQUEST</button>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function handleCollabSearch(val) {
-            const filtered = collabPool.filter(c => 
-                c.title.toLowerCase().includes(val.toLowerCase()) || 
-                c.artist.toLowerCase().includes(val.toLowerCase())
-            );
-            renderCollabCards(filtered.slice(0, 5));
-        }
-
-        function openCollabModal() {
-            const title = prompt("Enter Collab Project Title:");
-            if(title) {
-                const type = prompt("Enter Project Category (e.g. Manga, Digital, 3D):");
-                alert("Collaboration request published! You will be notified in the Workshop Notifications once another Artisan accepts.");
-                
-                // Simulate someone accepting after 3 seconds
-                setTimeout(() => {
-                    triggerNotification(`Artisan @Refine_Master accepted your request: "${title}"`);
-                }, 3000);
-            }
-        }
-
-        function acceptCollab(title) {
-            alert(`You have requested to join "${title}". The owner will be notified.`);
-        }
-
-        /* --- NOTIFICATION SYSTEM --- */
-
-        function triggerNotification(msg) {
-            notificationCount++;
-            const dot = document.getElementById('notifDot');
-            const countLabel = document.getElementById('notifCount');
-            if(dot) dot.style.display = 'block';
-            if(countLabel) countLabel.innerText = notificationCount;
-            console.log("Workshop Notification:", msg);
-        }
-
-        function viewNotifications() {
-            if(notificationCount > 0) {
-                alert(`You have ${notificationCount} new workshop alerts!\n\nLatest: Your collab request has been accepted.`);
-                notificationCount = 0;
-                document.getElementById('notifDot').style.display = 'none';
-                document.getElementById('notifCount').innerText = '0';
-            } else {
-                alert("No new notifications in the Workshop.");
-            }
-        }
-
-        /* --- PREVIOUS LOGIC (KEEP AS IS) --- */
-
-        function setRankCategory(cat) {
-            currentRankCat = cat;
-            document.querySelectorAll('[id^="cat-"]').forEach(b => b.classList.remove('active'));
-            document.getElementById('cat-' + cat).classList.add('active');
-            generateRankings();
-        }
-
-        function setRankTimeframe(time) {
-            currentRankTime = time;
-            document.querySelectorAll('[id^="time-"]').forEach(b => b.classList.remove('active'));
-            document.getElementById('time-' + time).classList.add('active');
-            generateRankings();
-        }
-
-        function generateRankings() {
-            const cont = document.getElementById('rankCont');
-            if(cont) {
-                cont.innerHTML = '';
-                const labels = { views: 'Views', likes: 'Likes', shares: 'Shares' };
-                const multiplier = currentRankTime === 'monthly' ? 50 : (currentRankTime === 'weekly' ? 10 : 1);
-
-                for (let i = 1; i <= 10; i++) {
-                    const val = Math.floor((1000 - (i * 85)) * multiplier);
-                    const item = document.createElement('div');
-                    item.className = 'rank-item';
-                    item.innerHTML = `
-                        <div class="rank-number">#${i}</div>
-                        <div class="rank-info">
-                            <div style="font-weight:900;">Artisan_User_${i+10}</div>
-                            <div style="font-size:12px; color:#999;">Featured in ${currentRankTime} spotlight</div>
-                        </div>
-                        <div class="rank-val">${val.toLocaleString()} ${labels[currentRankCat]}</div>
-                    `;
-                    cont.appendChild(item);
-                }
-            }
-        }
-
-        function loadCourseLessons(type) {
-            const lessons = workshopData[type];
-            const container = document.getElementById('lessonContainer');
-            document.getElementById('courseTitle').innerText = type.charAt(0).toUpperCase() + type.slice(1) + " Arts Lessons";
-            container.innerHTML = '';
-            lessons.forEach(lesson => {
-                const div = document.createElement('div');
-                div.className = 'home-card ws-theme';
-                div.onclick = () => { activeLesson = lesson; generateCalendar(); };
-                div.innerHTML = `<h3>${lesson}</h3><p>Level: Intermediate</p>`;
-                container.appendChild(div);
-            });
-            showPage('wsCourses');
-        }
-
-        function generateCalendar() {
-            const grid = document.getElementById('calendarGrid');
-            const lessonLabel = document.getElementById('selectedLessonName');
-            grid.innerHTML = ''; lessonLabel.innerText = `Booking for: ${activeLesson}`;
-            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const today = new Date(2026, 4, 6);
-            for (let i = 0; i < 7; i++) {
-                const date = new Date(today); date.setDate(today.getDate() + i);
-                const dayCard = document.createElement('div'); dayCard.className = 'calendar-day';
-                dayCard.onclick = function() {
-                    document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
-                    this.classList.add('active'); showTimesForDate(date.toDateString());
-                };
-                dayCard.innerHTML = `<span class="day-name">${days[date.getDay()]}</span><span class="day-number">${date.getDate()}</span>`;
-                grid.appendChild(dayCard);
-            }
-            showPage('wsClass');
-        }
-
-        function showTimesForDate(dateStr) {
-            const container = document.getElementById('timeSlots'); container.innerHTML = '';
-            const hours = ["09:00 AM", "01:00 PM", "04:00 PM", "07:00 PM"];
-            hours.forEach(time => {
-                const div = document.createElement('div'); div.className = 'home-card ws-theme';
-                div.onclick = () => alert(`Success! Enrolled in ${activeLesson} on ${dateStr} at ${time}.`);
-                div.innerHTML = `<h3>${time}</h3><p>Instructor: Senior Artisan</p>`;
-                container.appendChild(div);
-            });
-        }
-
-        function enterWorkshop() { isWorkshopMode = true; showPage('workshopHome'); }
-        function exitWorkshop() { isWorkshopMode = false; showPage('home'); }
 
         function updateNav() {
             const left = document.getElementById('navLinks');
             const center = document.getElementById('navCenterBtn');
             const right = document.getElementById('navRightSection');
             const nav = document.getElementById('mainNav');
-            
             if (isWorkshopMode) {
                 nav.className = 'nav-blue';
                 left.innerHTML = `<a onclick="showPage('wsCourses')">Courses</a><a onclick="showPage('wsRank')">Rankings</a><a onclick="showPage('wsCollab')">Collabs</a>`;
                 center.innerHTML = `<button class="btn-workshop-toggle" onclick="exitWorkshop()">Exit Workshop</button>`;
-                right.innerHTML = `
-                    <div class="notif-badge" onclick="viewNotifications()">
-                        <div id="notifDot" class="notif-dot"></div>
-                        <span id="notifCount">0</span>
-                    </div>
-                    <div style="color:white; font-weight:700; cursor:pointer;" onclick="logOut()">Log-Out</div>
-                `;
+                right.innerHTML = `<div class="notif-badge" onclick="viewNotifications()"><span>${notificationCount}</span></div><div style="color:white; font-weight:700; cursor:pointer;" onclick="logOut()">Log-Out</div>`;
             } else {
                 nav.className = 'nav-red';
                 left.innerHTML = `<a onclick="showPage('home')">Home</a><a onclick="showPage('publish')">Publish</a><a onclick="showPage('gallery')">Gallery</a><a onclick="showPage('profile')">Profile</a>`;
@@ -567,25 +572,64 @@
             }
         }
 
-        function renderGallery() {
-            const userGrid = document.getElementById('userGalleryTier');
-            const commGrid = document.getElementById('communityGalleryTier');
-            userGrid.innerHTML = ''; commGrid.innerHTML = '';
-            let allUserWorks = [];
-            for (let folder in studioFolders) { allUserWorks = allUserWorks.concat(studioFolders[folder]); }
-            for (let i = 0; i < 5; i++) {
-                const slot = document.createElement('div'); slot.className = 'spotlight-item';
-                if (allUserWorks[i]) slot.style.backgroundImage = `url(${allUserWorks[i]})`;
-                userGrid.appendChild(slot);
-            }
-            for (let i = 0; i < 5; i++) {
-                const slot = document.createElement('div'); slot.className = 'spotlight-item';
-                commGrid.appendChild(slot);
+        /* --- GALLERY SOCIAL ACTIONS --- */
+        function likeArt(btn, index) {
+            btn.classList.toggle('liked');
+            const isLiked = btn.classList.contains('liked');
+            btn.innerText = isLiked ? '❤️ LIKED' : '❤️ LIKE';
+            openCustomAlert("Engagement", isLiked ? `Art piece #${index + 1} added to your Favorites.` : `Removed #${index + 1} from Favorites.`, false);
+        }
+
+        function commentArt(index) {
+            openCustomPrompt("Community Arsenal", `Drop a comment on Artisan Work #${index + 1}:`, false, (msg) => {
+                openCustomAlert("Feedback Sent", `Your comment has been posted: "${msg}"`, false);
+            });
+        }
+
+        function shareArt(index) {
+            const dummyLink = `https://art-tillery.com/arsenal/work-${index + 100}`;
+            navigator.clipboard.writeText(dummyLink).then(() => {
+                openCustomAlert("Share Link", "Asset link copied to clipboard! Share it with the squad.", false);
+            });
+        }
+
+        /* --- COLLAB FUNCTIONS --- */
+        function applyToCollab(title) {
+            openCustomAlert('Application Sent', `You applied for: ${title}. Host will review your work.`, false);
+        }
+
+        function askForCollab() {
+            openCustomPrompt("Create Collaboration", "What is the theme of your project?", false, (theme) => {
+                const newCollab = {
+                    title: theme,
+                    artist: `@${userData.username}`, // Carries updated username
+                    type: userData.medium // Carries updated medium
+                };
+                collabPool.unshift(newCollab);
+                handleCollabSearch('');
+                notificationCount++;
+                updateNav();
+                openCustomAlert("Post Successful", `Your ${userData.medium} collaboration request is now live.`, false);
+            });
+        }
+
+        function viewNotifications() {
+            if (notificationCount > 0) {
+                openCustomAlert('Workshop Alerts', `You have ${notificationCount} new alerts regarding your collaborations.`, false, () => {
+                    notificationCount = 0;
+                    updateNav();
+                });
+            } else {
+                openCustomAlert('Workshop Alerts', 'No new notifications.', false);
             }
         }
 
+        /* --- FOLDER & UPLOAD --- */
         function renderFolders() {
-            const container = document.getElementById('folderContainer'); container.innerHTML = '';
+            const container = document.getElementById('folderContainer'); 
+            const label = document.getElementById('activeFolderLabel');
+            container.innerHTML = '';
+            label.innerText = `Selected Folder: ${selectedFolder}`;
             for (let folderName in studioFolders) {
                 const div = document.createElement('div');
                 div.className = `home-card ${selectedFolder === folderName ? 'active-folder' : ''}`;
@@ -599,24 +643,217 @@
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (e) => { studioFolders[selectedFolder].push(e.target.result); renderFolders(); };
+                reader.onload = (e) => { 
+                    studioFolders[selectedFolder].push(e.target.result); 
+                    renderFolders(); 
+                    openCustomAlert("Upload Success", `Image added to ${selectedFolder}`, true);
+                };
                 reader.readAsDataURL(file);
             }
         }
 
-        function createFolder() { const name = prompt("Folder Name:"); if(name) { studioFolders[name] = []; renderFolders(); } }
+        function createFolder() { 
+            openCustomPrompt("New Folder", "Enter folder name:", true, (name) => {
+                if(!studioFolders[name]) { studioFolders[name] = []; renderFolders(); }
+            }); 
+        }
+
+        function viewCurrentFolder() {
+            openMediaViewer(`Folder: ${selectedFolder}`, 'folder', studioFolders[selectedFolder]);
+        }
+
+        /* --- WORKSHOP & CALENDAR --- */
+        function enterWorkshop() { isWorkshopMode = true; showPage('workshopHome'); }
+        function exitWorkshop() { isWorkshopMode = false; showPage('home'); }
+
+        function loadCourseLessons(type) {
+            const lessons = workshopData[type];
+            const container = document.getElementById('lessonContainer');
+            document.getElementById('courseTitle').innerText = type.toUpperCase() + " Lessons";
+            container.innerHTML = '';
+            lessons.forEach(lesson => {
+                const div = document.createElement('div'); div.className = 'home-card ws-theme';
+                div.onclick = () => { activeLesson = lesson; generateCalendar(); };
+                div.innerHTML = `<h3>${lesson}</h3><p>Click to book session</p>`;
+                container.appendChild(div);
+            });
+            showPage('wsCourses');
+        }
+
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            document.getElementById('selectedLessonName').innerText = `Booking: ${activeLesson}`;
+            const today = new Date();
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(today); date.setDate(today.getDate() + i);
+                const dayCard = document.createElement('div'); 
+                dayCard.className = 'calendar-day';
+                dayCard.onclick = function() { 
+                    document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
+                    this.classList.add('active'); 
+                    showTimesForDate(date.getDay()); 
+                };
+                dayCard.innerHTML = `<span class="day-name">${date.toLocaleDateString('en-US', {weekday: 'short'})}</span><span class="day-number">${date.getDate()}</span>`;
+                grid.appendChild(dayCard);
+            }
+            document.getElementById('timeSlots').innerHTML = '<p style="color:#999">Select a date above to see available schedules.</p>';
+            showPage('wsClass');
+        }
+
+        function showTimesForDate(dayIndex) {
+            const container = document.getElementById('timeSlots');
+            container.innerHTML = '';
+            const schedules = dayIndex % 2 === 0 
+                ? ["09:00 AM - Morning Drill", "02:00 PM - Technical Session"] 
+                : ["10:30 AM - Open Lab", "04:00 PM - Critique Hour", "07:00 PM - Night Study"];
+
+            schedules.forEach(time => {
+                const div = document.createElement('div'); div.className = 'home-card ws-theme';
+                div.onclick = () => openCustomAlert('Booking Confirmed', `Scheduled: ${activeLesson} at ${time}`, false, () => showPage('workshopHome'));
+                div.innerHTML = `<h3>${time}</h3><p>Available Slot</p>`;
+                container.appendChild(div);
+            });
+        }
+
+        /* --- RANKINGS & COLLABS --- */
+        function setRankCategory(cat) { currentRankCat = cat; generateRankings(); }
+        function setRankTimeframe(time) { currentRankTime = time; generateRankings(); }
+
+        function generateRankings() {
+            const cont = document.getElementById('rankCont');
+            if(!cont) return;
+            cont.innerHTML = '';
+            document.querySelectorAll('.filter-group .filter-btn').forEach(b => b.classList.remove('active'));
+            const catEl = document.getElementById(`cat-${currentRankCat}`);
+            const timeEl = document.getElementById(`time-${currentRankTime}`);
+            if(catEl) catEl.classList.add('active');
+            if(timeEl) timeEl.classList.add('active');
+
+            for (let i = 1; i <= 10; i++) {
+                const item = document.createElement('div'); 
+                item.className = 'rank-item';
+                const score = Math.max(0, Math.floor(Math.random() * 500) + (100 * (11 - i)));
+                item.innerHTML = `
+                    <div class="rank-number">#${i}</div>
+                    <div class="rank-info"><strong>Artisan_User_${i}</strong><br><small>${currentRankTime.toUpperCase()} ${currentRankCat.toUpperCase()}</small></div>
+                    <div class="rank-val">${score}</div>`;
+                cont.appendChild(item);
+            }
+        }
+
+        function handleCollabSearch(query) {
+            const container = document.getElementById('collabContainer');
+            container.innerHTML = '';
+            const filtered = collabPool.filter(c => c.title.toLowerCase().includes(query.toLowerCase()) || c.artist.toLowerCase().includes(query.toLowerCase()));
+            filtered.forEach(c => {
+                const div = document.createElement('div'); div.className = 'home-card ws-theme';
+                div.innerHTML = `<span class="collab-tag">${c.type}</span><h3>${c.title}</h3><p>Host: ${c.artist}</p><button class="btn-action" onclick="applyToCollab('${c.title}')" style="background:var(--workshop-blue); width:100%; margin-top:10px;">Apply to Join</button>`;
+                container.appendChild(div);
+            });
+        }
+
+        /* --- GALLERY & SPOTLIGHT --- */
+        function renderGallery() {
+            const userGrid = document.getElementById('userGalleryTier');
+            const commGrid = document.getElementById('communityGalleryTier');
+            userGrid.innerHTML = ''; commGrid.innerHTML = '';
+            let allUserWorks = [];
+            for (let folder in studioFolders) { allUserWorks = allUserWorks.concat(studioFolders[folder]); }
+            
+            for (let i = 0; i < 5; i++) {
+                const slot = document.createElement('div'); slot.className = 'spotlight-item';
+                if (allUserWorks[i]) {
+                    slot.style.backgroundImage = `url(${allUserWorks[i]})`;
+                    slot.onclick = () => openMediaViewer("Personal Archive", "single", allUserWorks[i]);
+                } else {
+                    slot.style.backgroundColor = '#f8f8f8';
+                    slot.innerHTML = `<span style="opacity:0.2; font-size:10px; font-weight:900;">EMPTY SLOT</span>`;
+                }
+                userGrid.appendChild(slot);
+            }
+            
+            for (let i = 0; i < 5; i++) { 
+                const slot = document.createElement('div'); slot.className = 'spotlight-item';
+                slot.style.backgroundImage = `url(https://picsum.photos/300/400?random=${i})`;
+                slot.innerHTML = `
+                    <div class="social-bar">
+                        <div class="social-action" onclick="event.stopPropagation(); likeArt(this, ${i})">❤️ LIKE</div>
+                        <div class="social-action" onclick="event.stopPropagation(); commentArt(${i})">💬</div>
+                        <div class="social-action" onclick="event.stopPropagation(); shareArt(${i})">🔗</div>
+                    </div>`;
+                commGrid.appendChild(slot); 
+            }
+        }
 
         function generateSpotlight() {
             const cont = document.getElementById('spotlightCont');
-            if(cont) { cont.innerHTML = ''; for(let i=1; i<=10; i++) { const item = document.createElement('div'); item.className = 'spotlight-item'; cont.appendChild(item); } }
+            if(cont) { 
+                cont.innerHTML = ''; 
+                for(let i=1; i<=6; i++) { 
+                    const item = document.createElement('div');
+                    item.className = 'spotlight-item';
+                    item.style.backgroundImage = `url(https://picsum.photos/500/600?random=${i+10})`;
+                    cont.appendChild(item); 
+                } 
+            }
         }
 
-        function logOut() {
-            isWorkshopMode = false;
-            allPages.forEach(p => { const el = document.getElementById(p); if(el) el.classList.add('hidden'); });
-            document.getElementById('loginPage').classList.remove('hidden');
-            document.getElementById('mainNav').classList.add('hidden');
+        /* --- MODAL ENGINE --- */
+        function openCustomAlert(title, message, isRedTheme, callback) {
+            const overlay = document.getElementById('customModalOverlay');
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerText = message;
+            document.getElementById('modalInputArea').classList.add('hidden');
+            document.getElementById('modalBox').className = isRedTheme ? 'modal-box red-theme' : 'modal-box';
+            document.getElementById('modalConfirm').className = isRedTheme ? 'modal-btn red-btn' : 'modal-btn';
+            overlay.style.display = 'flex';
+            setTimeout(() => overlay.style.opacity = '1', 10);
+            document.getElementById('modalConfirm').onclick = () => { closeModal(); if(callback) callback(); };
         }
+
+        function openCustomPrompt(title, message, isRedTheme, callback) {
+            const overlay = document.getElementById('customModalOverlay');
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerText = message;
+            document.getElementById('modalInputArea').classList.remove('hidden');
+            const input = document.getElementById('customInput');
+            input.value = '';
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.style.opacity = '1'; input.focus(); }, 10);
+            document.getElementById('modalConfirm').onclick = () => { const val = input.value; closeModal(); if(val) callback(val); };
+        }
+
+        function closeModal() {
+            const overlay = document.getElementById('customModalOverlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.style.display = 'none', 300);
+        }
+
+        function openMediaViewer(title, type, data) {
+            const overlay = document.getElementById('mediaViewerOverlay');
+            const body = document.getElementById('viewerBody');
+            document.getElementById('viewerTitle').innerText = title;
+            body.innerHTML = '';
+            if (type === 'folder') {
+                let grid = document.createElement('div'); grid.className = 'viewer-grid';
+                data.forEach(src => {
+                    let img = document.createElement('img'); img.src = src; img.className = 'viewer-img';
+                    grid.appendChild(img);
+                });
+                body.appendChild(grid);
+            } else { body.innerHTML = `<img src="${data}" class="full-img-view">`; }
+            overlay.style.display = 'flex';
+            setTimeout(() => overlay.style.opacity = '1', 10);
+        }
+
+        function closeMediaViewer() {
+            const overlay = document.getElementById('mediaViewerOverlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.style.display = 'none', 300);
+        }
+
+        function logOut() { isWorkshopMode = false; showPage('login'); document.getElementById('mainNav').classList.add('hidden'); }
     </script>
 </body>
 </html>
