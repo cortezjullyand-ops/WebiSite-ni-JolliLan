@@ -133,14 +133,44 @@
             z-index: 10;
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px);
-            padding: 60px 50px;
+            padding: 50px;
             border-radius: 40px;
             box-shadow: 0 30px 60px rgba(0,0,0,0.12);
             border: 1px solid rgba(255,255,255,0.5);
             text-align: center; 
             animation: fadeInScale 1.2s ease-out; 
-            max-width: 450px;
+            max-width: 400px;
             width: 90%;
+        }
+
+        /* Login Inputs Style */
+        .login-field {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            border: 2px solid #eee;
+            outline: none;
+            font-size: 14px;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        .login-field:focus {
+            border-color: var(--primary-red);
+            background: #fffafa;
+        }
+
+        .login-select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            border: 2px solid #eee;
+            background: white;
+            font-weight: 700;
+            color: #555;
+            cursor: pointer;
         }
 
         @keyframes fadeInScale {
@@ -149,14 +179,14 @@
         }
 
         .greeting-title {
-            font-family: 'Brush Script MT', cursive; font-size: 85px; margin: 0;
+            font-family: 'Brush Script MT', cursive; font-size: 70px; margin: 0;
             color: var(--primary-red);
             animation: slideIn 1.5s ease-out;
             text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
         }
         .sub-greeting {
-            font-size: 14px; color: #666; margin-bottom: 45px; font-weight: 700;
-            letter-spacing: 5px; text-transform: uppercase; animation: slideIn 1.8s ease-out;
+            font-size: 12px; color: #666; margin-bottom: 35px; font-weight: 700;
+            letter-spacing: 3px; text-transform: uppercase; animation: slideIn 1.8s ease-out;
         }
 
         @keyframes slideIn {
@@ -164,7 +194,7 @@
             100% { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
 
-        /* --- LOGIN & CARDS --- */
+        /* --- GENERAL CONTAINERS --- */
         .container-view { padding: 110px 50px 50px 50px; min-height: 100vh; box-sizing: border-box; }
         .hidden { display: none !important; }
         .animate-page { animation: pageEnter 0.7s ease-out forwards; }
@@ -317,7 +347,6 @@
 </head>
 <body>
 
-    <!-- MODALS -->
     <div id="customModalOverlay">
         <div id="modalBox" class="modal-box">
             <h2 id="modalTitle">Notice</h2>
@@ -337,7 +366,6 @@
         </div>
     </div>
 
-    <!-- NAV BAR -->
     <nav id="mainNav" class="nav-red hidden">
         <div class="nav-layout">
             <div class="nav-left" id="navLinks"></div>
@@ -348,18 +376,26 @@
         </div>
     </nav>
 
-    <!-- LOGIN -->
     <div id="loginPage">
         <div class="login-card">
             <h1 class="greeting-title">ART-tillery</h1>
             <p class="sub-greeting">Gallery and Workshop</p>
+            
+            <input type="text" id="loginUser" class="login-field" placeholder="Username">
+            <input type="password" id="loginPass" class="login-field" placeholder="Password">
+            
+            <select id="loginRole" class="login-select">
+                <option value="Artisan">Login as Artisan</option>
+                <option value="Admin">Login as Admin</option>
+                <option value="Superadmin">Login as Superadmin</option>
+            </select>
+
             <button class="btn-workshop-toggle" 
                 style="background: var(--primary-red); color: white; padding: 18px 50px; font-size: 14px; border-radius: 50px; width: 100%; box-shadow: 0 10px 25px rgba(255, 59, 48, 0.3);" 
-                onclick="showPage('home')">ENTER STUDIO</button>
+                onclick="handleLogin()">ENTER STUDIO</button>
         </div>
     </div>
 
-    <!-- PAGES -->
     <div id="homePage" class="container-view hidden">
         <div class="animate-page" style="text-align: center;">
             <h1 style="font-size: 70px; font-weight: 900; margin:0;">Armed with <br><span style="color:var(--primary-red)">Creativity.</span></h1>
@@ -415,7 +451,6 @@
                     <button class="medium-btn" id="med-trad" onclick="selectMedium('Traditional')">Traditional</button>
                     <button class="medium-btn" id="med-digi" onclick="selectMedium('Digital')">Digital</button>
                     <button class="medium-btn" id="med-both" onclick="selectMedium('Both')">Digital & Traditional</button>
-					<button class="medium-btn" id="med-both" onclick="selectMedium('Both')">Photography</button>
                 </div>
 
                 <button class="btn-action" style="width: 100%;" onclick="saveProfile()">Update Portfolio</button>
@@ -499,7 +534,8 @@
         let userData = {
             username: "Artisan_User",
             specialty: "Illustrator / Concept Artist",
-            medium: "Digital"
+            medium: "Digital",
+            role: "Artisan"
         };
 
         const workshopData = {
@@ -514,12 +550,33 @@
             { title: "Fantasy Flora Study", artist: "@BotanistArt", type: "Traditional" }
         ];
 
+        /* --- LOGIN SYSTEM --- */
+        function handleLogin() {
+            const user = document.getElementById('loginUser').value;
+            const pass = document.getElementById('loginPass').value;
+            const role = document.getElementById('loginRole').value;
+
+            if (user.trim() === "" || pass.trim() === "") {
+                openCustomAlert("Login Failed", "Please provide both username and password.", true);
+                return;
+            }
+
+            // Update user state
+            userData.username = user;
+            userData.role = role;
+
+            // Welcome Alert
+            openCustomAlert("Login Successful", `Welcome, ${role} ${user}. System initialised.`, false, () => {
+                showPage('home');
+            });
+        }
+
         /* --- PROFILE LOGIC --- */
         function selectMedium(med) {
             userData.medium = med;
             document.querySelectorAll('.medium-btn').forEach(b => b.classList.remove('selected'));
             const idMap = { 'Traditional': 'med-trad', 'Digital': 'med-digi', 'Both': 'med-both' };
-            document.getElementById(idMap[med]).classList.add('selected');
+            if(idMap[med]) document.getElementById(idMap[med]).classList.add('selected');
         }
 
         function saveProfile() {
@@ -577,7 +634,7 @@
             btn.classList.toggle('liked');
             const isLiked = btn.classList.contains('liked');
             btn.innerText = isLiked ? '❤️ LIKED' : '❤️ LIKE';
-            openCustomAlert("Engagement", isLiked ? `Art piece #${index + 1} added to your Favorites.` : `Removed #${index + 1} from Favorites.`, false);
+            openCustomAlert("Engagement", isLiked ? `Art piece added to your Favorites.` : `Removed from Favorites.`, false);
         }
 
         function commentArt(index) {
@@ -589,33 +646,33 @@
         function shareArt(index) {
             const dummyLink = `https://art-tillery.com/arsenal/work-${index + 100}`;
             navigator.clipboard.writeText(dummyLink).then(() => {
-                openCustomAlert("Share Link", "Asset link copied to clipboard! Share it with the squad.", false);
+                openCustomAlert("Share Link", "Asset link copied to clipboard!", false);
             });
         }
 
         /* --- COLLAB FUNCTIONS --- */
         function applyToCollab(title) {
-            openCustomAlert('Application Sent', `You applied for: ${title}. Host will review your work.`, false);
+            openCustomAlert('Application Sent', `You applied for: ${title}.`, false);
         }
 
         function askForCollab() {
             openCustomPrompt("Create Collaboration", "What is the theme of your project?", false, (theme) => {
                 const newCollab = {
                     title: theme,
-                    artist: `@${userData.username}`, // Carries updated username
-                    type: userData.medium // Carries updated medium
+                    artist: `@${userData.username}`, 
+                    type: userData.medium 
                 };
                 collabPool.unshift(newCollab);
                 handleCollabSearch('');
                 notificationCount++;
                 updateNav();
-                openCustomAlert("Post Successful", `Your ${userData.medium} collaboration request is now live.`, false);
+                openCustomAlert("Post Successful", `Your collaboration request is now live.`, false);
             });
         }
 
         function viewNotifications() {
             if (notificationCount > 0) {
-                openCustomAlert('Workshop Alerts', `You have ${notificationCount} new alerts regarding your collaborations.`, false, () => {
+                openCustomAlert('Workshop Alerts', `You have ${notificationCount} new alerts.`, false, () => {
                     notificationCount = 0;
                     updateNav();
                 });
@@ -697,7 +754,7 @@
                 dayCard.innerHTML = `<span class="day-name">${date.toLocaleDateString('en-US', {weekday: 'short'})}</span><span class="day-number">${date.getDate()}</span>`;
                 grid.appendChild(dayCard);
             }
-            document.getElementById('timeSlots').innerHTML = '<p style="color:#999">Select a date above to see available schedules.</p>';
+            document.getElementById('timeSlots').innerHTML = '<p style="color:#999">Select a date above.</p>';
             showPage('wsClass');
         }
 
@@ -706,11 +763,11 @@
             container.innerHTML = '';
             const schedules = dayIndex % 2 === 0 
                 ? ["09:00 AM - Morning Drill", "02:00 PM - Technical Session"] 
-                : ["10:30 AM - Open Lab", "04:00 PM - Critique Hour", "07:00 PM - Night Study"];
+                : ["10:30 AM - Open Lab", "04:00 PM - Critique Hour"];
 
             schedules.forEach(time => {
                 const div = document.createElement('div'); div.className = 'home-card ws-theme';
-                div.onclick = () => openCustomAlert('Booking Confirmed', `Scheduled: ${activeLesson} at ${time}`, false, () => showPage('workshopHome'));
+                div.onclick = () => openCustomAlert('Booking Confirmed', `${time}`, false, () => showPage('workshopHome'));
                 div.innerHTML = `<h3>${time}</h3><p>Available Slot</p>`;
                 container.appendChild(div);
             });
@@ -730,14 +787,11 @@
             if(catEl) catEl.classList.add('active');
             if(timeEl) timeEl.classList.add('active');
 
-            for (let i = 1; i <= 10; i++) {
+            for (let i = 1; i <= 5; i++) {
                 const item = document.createElement('div'); 
                 item.className = 'rank-item';
-                const score = Math.max(0, Math.floor(Math.random() * 500) + (100 * (11 - i)));
-                item.innerHTML = `
-                    <div class="rank-number">#${i}</div>
-                    <div class="rank-info"><strong>Artisan_User_${i}</strong><br><small>${currentRankTime.toUpperCase()} ${currentRankCat.toUpperCase()}</small></div>
-                    <div class="rank-val">${score}</div>`;
+                const score = Math.floor(Math.random() * 500) + 100;
+                item.innerHTML = `<div class="rank-number">#${i}</div><div class="rank-info"><strong>Artisan_${i}</strong></div><div class="rank-val">${score}</div>`;
                 cont.appendChild(item);
             }
         }
@@ -745,10 +799,10 @@
         function handleCollabSearch(query) {
             const container = document.getElementById('collabContainer');
             container.innerHTML = '';
-            const filtered = collabPool.filter(c => c.title.toLowerCase().includes(query.toLowerCase()) || c.artist.toLowerCase().includes(query.toLowerCase()));
+            const filtered = collabPool.filter(c => c.title.toLowerCase().includes(query.toLowerCase()));
             filtered.forEach(c => {
                 const div = document.createElement('div'); div.className = 'home-card ws-theme';
-                div.innerHTML = `<span class="collab-tag">${c.type}</span><h3>${c.title}</h3><p>Host: ${c.artist}</p><button class="btn-action" onclick="applyToCollab('${c.title}')" style="background:var(--workshop-blue); width:100%; margin-top:10px;">Apply to Join</button>`;
+                div.innerHTML = `<span class="collab-tag">${c.type}</span><h3>${c.title}</h3><p>Host: ${c.artist}</p><button class="btn-action" onclick="applyToCollab('${c.title}')" style="background:var(--workshop-blue); width:100%; margin-top:10px;">Apply</button>`;
                 container.appendChild(div);
             });
         }
@@ -776,12 +830,7 @@
             for (let i = 0; i < 5; i++) { 
                 const slot = document.createElement('div'); slot.className = 'spotlight-item';
                 slot.style.backgroundImage = `url(https://picsum.photos/300/400?random=${i})`;
-                slot.innerHTML = `
-                    <div class="social-bar">
-                        <div class="social-action" onclick="event.stopPropagation(); likeArt(this, ${i})">❤️ LIKE</div>
-                        <div class="social-action" onclick="event.stopPropagation(); commentArt(${i})">💬</div>
-                        <div class="social-action" onclick="event.stopPropagation(); shareArt(${i})">🔗</div>
-                    </div>`;
+                slot.innerHTML = `<div class="social-bar"><div class="social-action" onclick="event.stopPropagation(); likeArt(this, ${i})">❤️ LIKE</div></div>`;
                 commGrid.appendChild(slot); 
             }
         }
